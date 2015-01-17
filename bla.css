@@ -1,0 +1,30 @@
+/*Fontawesome Iconfont*/
+@import url(http://thecodeplayer.com/uploads/fonts/font-awesome-4.0.1/css/font-awesome.min.css);
+/*Montserrat, Open Sans*/
+@import url(http://fonts.googleapis.com/css?family=Montserrat|Open+Sans:400,300);
+
+* {margin: 0; padding: 0;}
+body {background: #333;}
+
+#wrapper {width: 645px; height: 500px; margin: 35px auto 0 auto;}
+h1 {
+    color: white; font: 300 40px 'Open Sans';
+    width: 300px; padding: 30px; float: left;
+}
+
+#Menu {
+    float: left;
+    padding-top: 10%;
+    padding-left: 10%;
+    list-style: none;
+    color: white;
+}
+
+.paintList {
+    list-style-type: none;
+    text-align: center;
+}
+
+#painter {
+    clear: right;
+}
