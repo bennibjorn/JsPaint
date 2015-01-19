@@ -3,6 +3,7 @@ $(document).ready(function(){
     var context = canvas.getContext("2d");
 
     // Mouse handlers
+    /*
     $("#painter").mousemove(function(e) {
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
@@ -12,13 +13,16 @@ $(document).ready(function(){
         context.lineTo(mouseX, mouseY);
         context.stroke();
     });
-
-    $("#painter").mousedown(function(e) {
+    */
+    $("#painter").mousedown(function(e) { //paints a black rect on mousedown
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
 
-        context.fillStyle = "white";
+        context.fillStyle = "black";
         context.fillRect(mouseX - 30, mouseY - 30, 60, 60);
+    });
+    $("#clearBtn").mousedown(function() {
+       context.clearRect(0, 0, canvas.width, canvas.height);
     });
 });
 
