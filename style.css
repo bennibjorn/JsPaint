@@ -4,7 +4,16 @@
 @import url(http://fonts.googleapis.com/css?family=Montserrat|Open+Sans:400,300);
 
 * {margin: 0; padding: 0;}
-body {background: #333;}
+body {
+    background: #333;
+    padding-top: 50px;
+}
+
+
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
 
 #wrapper {width: 645px; height: 500px; margin: 35px auto 0 auto;}
 h1 {
@@ -23,6 +32,10 @@ h1 {
 .paintList {
     list-style-type: none;
     text-align: center;
+}
+
+.paintList li {
+    display: inline;
 }
 
 #painter {
