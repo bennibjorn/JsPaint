@@ -1,6 +1,17 @@
 $(document).ready(function(){
     var canvas = document.getElementById("painter");
     var context = canvas.getContext("2d");
+    var drawing = {
+        shapes: [],
+        nextObject: "pen",
+        nextColor: "black"
+
+        //drawAll: function drawAll() {
+        //    for (var i = 0; i < shapes.length; ++i) {
+        //        shapes[i].draw(// TODO: there will be some parameters here...);
+        //    }
+        //}
+    };
 
     // Mouse handlers
     /*
@@ -24,28 +35,13 @@ $(document).ready(function(){
     $("#clearBtn").mousedown(function() {
        context.clearRect(0, 0, canvas.width, canvas.height);
     });
+
+    $(".toolButton").mousedown(function() {
+        drawing.nextObject = $(this).attr("data-tooltype");
+    });
 });
 
 //
-//var drawing = {
-//    shapes: [],
-//    nextObject: "pen",
-//    nextColor: "black",
-//
-//    drawAll: function drawAll() {
-//        for (var i = 0; i < shapes.length; ++i) {
-//            shapes[i].draw(// TODO: there will be some parameters here...);
-//        }
-//    }
-//};
-//
-//$(".toolButton").click(function(event) {
-//    // Assuming there is an attribute on the button element
-//    // called data-tooltype (could be something other than a button...),
-//    // and that the attribute contains the name of the tool,
-//    // i.e. "rect", "circle" etc.
-//    drawing.nextObject = $(this).attr("data-tooltype");
-//});
 //
 //$(".colorButton").click(function(event) {
 //    // Similar code to the toolButton event handler above
