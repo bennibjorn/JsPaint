@@ -25,12 +25,33 @@ $(document).ready(function(){
         context.stroke();
     });
     */
-    $("#painter").mousedown(function(e) { //paints a black rect on mousedown
+    $("#painter").mousedown(function(e) {
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
 
-        context.fillStyle = "black";
-        context.fillRect(mouseX - 30, mouseY - 30, 60, 60);
+        if (drawing.nextObject == "rect") {
+            context.fillStyle = drawing.nextColor;
+            context.fillRect(mouseX - 30, mouseY - 30, 60, 60);
+        }
+        else if (drawing.nextObject == "line") {
+            //TODO: find out how to get mouse starting and ending positions for dragging
+            context.beginPath();
+            context.strokeStyle = drawing.nextColor;
+            context.moveTo(0, 0);
+            context.lineTo(mouseX, mouseY);
+            context.stroke();
+        }
+        else if (drawing.nextObject == "circle") {
+            //TODO: add functionality for circle
+        }
+        else if (drawing.nextObject == "pen") {
+            //TODO: add functionality for pen
+        }
+        else if (drawing.nextObject == "text") {
+            context.fillStyle = drawing.nextColor;
+            context.fillText("asdf", mouseX, mouseY);
+        }
+
     });
     $("#clearBtn").mousedown(function() {
        context.clearRect(0, 0, canvas.width, canvas.height);
