@@ -1,17 +1,19 @@
 $(document).ready(function(){
     var canvas = document.getElementById("painter");
     var context = canvas.getContext("2d");
+    var x0;
+    var y0;
+
     var drawing = {
         shapes: [],
         nextObject: "pen",
         nextColor: "black"
-
+    }
         //drawAll: function drawAll() {
         //    for (var i = 0; i < shapes.length; ++i) {
         //        shapes[i].draw(// TODO: there will be some parameters here...);
         //    }
         //}
-    };
 
     // Mouse handlers
     /*
@@ -28,6 +30,8 @@ $(document).ready(function(){
     $("#painter").mousedown(function(e) {
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
+        x0 = mouseX;
+        y0 = mouseY;
 
         if (drawing.nextObject == "rect") {
             context.fillStyle = drawing.nextColor;
@@ -35,11 +39,8 @@ $(document).ready(function(){
         }
         else if (drawing.nextObject == "line") {
             //TODO: find out how to get mouse starting and ending positions for dragging
-            context.beginPath();
-            context.strokeStyle = drawing.nextColor;
-            context.moveTo(0, 0);
-            context.lineTo(mouseX, mouseY);
-            context.stroke();
+
+
         }
         else if (drawing.nextObject == "circle") {
             //TODO: add functionality for circle
@@ -51,8 +52,33 @@ $(document).ready(function(){
             context.fillStyle = drawing.nextColor;
             context.fillText("asdf", mouseX, mouseY);
         }
-
     });
+
+    $("#painter").mouseup(function(e) {
+        var x1 = e.pageX - this.offsetLeft;
+        var y1 = e.pageY - this.offsetTop;
+
+        if (drawing.nextObject == "rect") {
+            //TODO
+        }
+        else if (drawing.nextObject == "line") {
+            context.beginPath();
+            context.strokeStyle = drawing.nextColor;
+            context.moveTo(x0, y0);
+            context.lineTo(x1, y1);
+            context.stroke();
+        }
+        else if (drawing.nextObject == "circle") {
+            //TODO: add functionality for circle
+        }
+        else if (drawing.nextObject == "pen") {
+            //TODO: add functionality for pen
+        }
+        else if (drawing.nextObject == "text") {
+            //TODO
+        }
+    });
+
     $("#clearBtn").mousedown(function() {
        context.clearRect(0, 0, canvas.width, canvas.height);
     });
