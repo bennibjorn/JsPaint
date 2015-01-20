@@ -5,11 +5,12 @@ $(document).ready(function(){
     var y0 = 0;
     var mousePressed = false;
 
+    var currentInputBox;
     var drawing = {
         shapes: [],
         nextObject: "pen",
         nextColor: "black"
-    }
+    };
         //drawAll: function drawAll() {
         //    for (var i = 0; i < shapes.length; ++i) {
         //        shapes[i].draw(// TODO: there will be some parameters here...);
@@ -47,8 +48,6 @@ $(document).ready(function(){
             context.moveTo(x0,y0);
         }
         else if (drawing.nextObject == "text") {
-            context.fillStyle = drawing.nextColor;
-            context.fillText("asdf", x0, y0);
         }
     });
 
@@ -110,9 +109,35 @@ $(document).ready(function(){
             context.stroke();
         }
         else if (drawing.nextObject == "text") {
-            //TODO
+            if (currentInputBox) {
+                currentInputBox.remove();
+            }
+            var inputposY = y1 + 120;
+            var inputposX = x1 + 40;
+            currentInputBox = $("<input />");
+            currentInputBox.css("position", "fixed");
+            currentInputBox.css("top", inputposY);
+            currentInputBox.css("left", inputposX);
+
+            $(".canvasdiv").append(currentInputBox);
+            currentInputBox.focus();
         }
     });
+
+    $(document).keypress(function(event) {
+        if(event.which === 13 && drawing.nextObject == "text") {
+            if(currentInputBox) {
+                var inputBoxOffset = currentInputBox.offset();
+                canvastext(inputBoxOffset.left, inputBoxOffset.top, currentInputBox.val());
+                currentInputBox.remove();
+            }
+        }
+    });
+
+    function canvastext(left, top, text) {
+        context.font = "14px Georgia";
+        context.fillText(text, left, top);
+    }
 
     $("#clearBtn").mousedown(function() {
        context.clearRect(0, 0, canvas.width, canvas.height);
@@ -122,48 +147,3 @@ $(document).ready(function(){
         drawing.nextObject = $(this).attr("data-tooltype");
     });
 });
-
-//
-//
-//$(".colorButton").click(function(event) {
-//    // Similar code to the toolButton event handler above
-//    drawing.nextColor = ...
-//});
-//
-//$("#myCanvas").mousedown(function(e) {
-//    if (nextObject === "rect") {
-//        // Should draw a rectangle
-//        drawing.shapes.push( new Rect(drawing.nextColor, e.X, e.Y ));
-//    } else if (nextObject === "circle") {
-//        drawing.shapes.push( new Circle(drawing.nextColor, e.X, e.Y ));
-//    }
-//});
-//
-//function Shape() {
-//    this.x = x;
-//    this.y = y;
-//    this.color = color;
-//
-//    this.isAtPoint = function(x,y) {
-//        //
-//    }
-//}
-//
-//function Rect(color, x, y) {
-//    this.draw = function draw () {
-//        // TODO: learn about canvas!!!
-//    },
-//        this.isAtPoint = function(x,y) {
-////		return this.shape.isAtPoint(x,y)
-//        }
-//}
-//
-//Rect.prototype = new Shape();
-//
-//function Circle() {
-//    this.draw = function draw() {
-//        // TODO: learn about canvas!!!
-//    }
-//}
-//
-//Circle.prototype = new Shape();
