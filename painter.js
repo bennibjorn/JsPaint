@@ -12,7 +12,8 @@ $(document).ready(function(){
         shapes: [],
         nextObject: "pen",
         nextColor: "black",
-        nextFont: "14px Georgia"
+        nextFont: "Georgia",
+        fontsize: "20px"
     };
 
     // Mouse handlers
@@ -65,6 +66,7 @@ $(document).ready(function(){
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
             tempContext.lineTo(x,y);
+            tempContext.strokeStyle = drawing.nextColor;
             tempContext.stroke();
         }
         else if (drawing.nextObject == "3dTool") { //bonus
@@ -84,7 +86,7 @@ $(document).ready(function(){
 
         if (drawing.nextObject == "rect") {
             mousePressed = false;
-            context.strokeStyle = drawing.nextColor;
+            context.fillStyle = drawing.nextColor;
             context.fillRect(x0, y0, (x1 - x0), (y1-y0));
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
         }
@@ -117,7 +119,7 @@ $(document).ready(function(){
             currentInputBox.css("top", inputposY);
             currentInputBox.css("left", inputposX);
 
-            $("#canvascontainer").append(currentInputBox);
+            $(".canvasContainer").append(currentInputBox);
             currentInputBox.focus();
         }
     });
@@ -127,6 +129,7 @@ $(document).ready(function(){
             if(currentInputBox) {
                 var inputBoxOffset = currentInputBox.offset();
                 canvastext(inputBoxOffset.left, inputBoxOffset.top, currentInputBox.val());
+                //canvastext(x1, y1, currentInputBox.val());
                 currentInputBox.remove();
             }
         }
@@ -134,9 +137,10 @@ $(document).ready(function(){
 
     function canvastext(left, top, text) {
         if (text == "3d") { //oooo secret stuff
-            drawing.nextObject = "3dtool";
+            drawing.nextObject = "3dTool";
         }
-        context.font = drawing.nextFont;
+        context.font = drawing.fontsize + ' ' + drawing.nextFont;
+        context.fillStyle = drawing.nextColor;
         context.fillText(text, left, top);
     }
 
@@ -149,5 +153,11 @@ $(document).ready(function(){
     });
     $(".colorButton").mousedown(function() {
        drawing.nextColor = $(this).attr("data-tooltype");
+    });
+    $(".fontSize").mousedown(function() {
+        drawing.fontsize = $(this).attr("data-tooltype");
+    });
+    $(".fontSelect").mousedown(function() {
+        drawing.nextFont = $(this).attr("data-tooltype");
     });
 });
