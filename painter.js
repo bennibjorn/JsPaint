@@ -29,10 +29,8 @@ $(document).ready(function(){
     });
     */
     $("#painter").mousedown(function(e) {
-        var mouseX = e.pageX - this.offsetLeft;
-        var mouseY = e.pageY - this.offsetTop;
-        x0 = mouseX;
-        y0 = mouseY;
+        x0 = e.pageX - this.offsetLeft;
+        y0 = e.pageY - this.offsetTop;
 
         if (drawing.nextObject == "rect") {
             //Implemented in mouseup
@@ -50,7 +48,7 @@ $(document).ready(function(){
         }
         else if (drawing.nextObject == "text") {
             context.fillStyle = drawing.nextColor;
-            context.fillText("asdf", mouseX, mouseY);
+            context.fillText("asdf", x0, y0);
         }
     });
 
