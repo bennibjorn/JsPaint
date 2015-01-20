@@ -33,7 +33,7 @@ $(document).ready(function(){
             //Implemented in mousemove
         }
         else if (drawing.nextObject == "circle") {
-            context.beginPath();
+            //Implemented in mousemove
         }
         else if (drawing.nextObject == "pen") {
             tempContext.beginPath();
@@ -55,16 +55,19 @@ $(document).ready(function(){
             tempContext.fillRect(x0, y0, (x - x0), (y - y0));
         }
         else if (drawing.nextObject == "line" && mousePressed) {
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
             tempContext.beginPath();
             tempContext.strokeStyle = drawing.nextColor;
             tempContext.moveTo(x0, y0);
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
             tempContext.lineTo(x, y);
             tempContext.stroke();
             tempContext.closePath();
         }
         else if (drawing.nextObject == "circle" && mousePressed) {
-            //TODO: add functionality for circle
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
+            tempContext.beginPath();
+            tempContext.arc(Math.abs(x-x0), Math.abs(y-y0), Math.abs((x-x0)/2), 0, 2 * Math.PI);
+            tempContext.stroke();
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
             tempContext.lineTo(x,y);
@@ -103,9 +106,9 @@ $(document).ready(function(){
             context.stroke();
         }
         else if (drawing.nextObject == "circle") {
-            mousePressed = false;
-            context.arc(x1-x0, (y1-y0), ((x1-x0)/2), 0, 2 * Math.PI);
-            context.stroke();
+            tempContext.closePath();
+            context.drawImage(tempCanvas, 0, 0);
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
         }
         else if (drawing.nextObject == "pen") {
             tempContext.closePath();
