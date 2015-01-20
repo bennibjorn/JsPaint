@@ -69,13 +69,11 @@ $(document).ready(function(){
             tempContext.strokeStyle = drawing.nextColor;
             tempContext.stroke();
         }
-        else if (drawing.nextObject == "3dTool") { //bonus
-            if(mousePressed) {
-                context.beginPath();
-                context.moveTo(x0,y0);
-                context.lineTo(x,y);
-                context.stroke();
-            }
+        else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
+            context.beginPath();
+            context.moveTo(x0,y0);
+            context.lineTo(x,y);
+            context.stroke();
         }
     });
 
@@ -139,10 +137,58 @@ $(document).ready(function(){
     function canvastext(left, top, text) {
         if (text == "3d") { //oooo secret stuff
             drawing.nextObject = "3dTool";
-        }
+            alert("Enjoy your Easter egg");
+            return;
+        } else if (text == "easterFill") { easterFill(); return; }
         context.font = drawing.fontsize + ' ' + drawing.nextFont;
         context.fillStyle = drawing.nextColor;
         context.fillText(text, left, top);
+    }
+
+    function easterFill() {
+        window.requestAnimFrame = (function(callback) {
+            return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+            function(callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+        })();
+
+        var easteri = 0;
+        var easterj = 0;
+        var easterk = 0;
+
+        function lineFill(context) {
+            context.beginPath()
+            context.moveTo(250, 250)
+            context.lineTo(easteri, easterj);
+            context.stroke();
+
+            if(easterk < 500) {
+                easteri++;
+                easterk++;
+            } else if(500 <= easterk && easterk < 1000) {
+                easterj++;
+                easterk++;
+            } else if(1000 <= easterk && easterk < 1500) {
+                easteri--;
+                easterk++;
+            } else if(1500 <= easterk && easterk < 2001 ) {
+                easterj--;
+                easterk++;
+            };
+            //console.log(k);
+        };
+
+        function animate(context) {
+            lineFill(context);
+            requestAnimFrame(function() {
+                if(easterk != 2001) {
+                  animate(context);
+                };
+            });
+        };
+
+        animate(context);
     }
 
     $("#clearBtn").mousedown(function() {
