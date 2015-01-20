@@ -85,14 +85,7 @@ $(document).ready(function(){
         mousePressed = false;
 
         if (drawing.nextObject == "rect") {
-<<<<<<< HEAD
             fromTempToCanvas();
-=======
-            mousePressed = false;
-            context.fillStyle = drawing.nextColor;
-            context.fillRect(x0, y0, (x1 - x0), (y1-y0));
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
->>>>>>> origin/master
         }
         else if (drawing.nextObject == "line") {
             fromTempToCanvas();
