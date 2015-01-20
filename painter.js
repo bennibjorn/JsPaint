@@ -1,8 +1,9 @@
 $(document).ready(function(){
     var canvas = document.getElementById("painter");
     var context = canvas.getContext("2d");
-    var x0;
-    var y0;
+    var x0 = 0;
+    var y0 = 0;
+    var mousePressed = false;
 
     var drawing = {
         shapes: [],
@@ -43,12 +44,47 @@ $(document).ready(function(){
             //TODO: add functionality for circle
         }
         else if (drawing.nextObject == "pen") {
-            //TODO: add functionality for pen
+            mousePressed = true;
+            context.beginPath();
+            context.moveTo(x0,y0);
         }
         else if (drawing.nextObject == "text") {
             context.fillStyle = drawing.nextColor;
             context.fillText("asdf", mouseX, mouseY);
         }
+    });
+
+    $("#painter").mousemove(function(e) {
+        var x = e.pageX - this.offsetLeft;
+        var y = e.pageY - this.offsetTop;
+
+        if (drawing.nextObject == "rect") {
+            //TODO
+        }
+        else if (drawing.nextObject == "line") {
+            //TODO
+        }
+        else if (drawing.nextObject == "circle") {
+            //TODO: add functionality for circle
+        }
+        else if (drawing.nextObject == "pen") {
+            if(mousePressed) {
+                context.lineTo(x,y);
+            }
+        }
+        else if (drawing.nextObject == "text") {
+            //TODO
+        }
+        /*
+        else if (3dTool) {
+            if(mousePressed) {
+                context.beginPath();
+                context.moveTo(x0,y0);
+                context.lineTo(x,y);
+                context.stroke();
+            }
+        }
+        */
     });
 
     $("#painter").mouseup(function(e) {
@@ -64,13 +100,16 @@ $(document).ready(function(){
             context.strokeStyle = drawing.nextColor;
             context.moveTo(x0, y0);
             context.lineTo(x1, y1);
+            context.closePath();
             context.stroke();
         }
         else if (drawing.nextObject == "circle") {
             //TODO: add functionality for circle
         }
         else if (drawing.nextObject == "pen") {
-            //TODO: add functionality for pen
+            mousePressed = false;
+            //context.closePath();
+            context.stroke();
         }
         else if (drawing.nextObject == "text") {
             //TODO
