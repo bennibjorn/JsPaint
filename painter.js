@@ -36,8 +36,8 @@ $(document).ready(function(){
             context.beginPath();
         }
         else if (drawing.nextObject == "pen") {
-            context.beginPath();
-            context.moveTo(x0,y0);
+            tempContext.beginPath();
+            tempContext.moveTo(x0,y0);
         }
         else if (drawing.nextObject == "text") {
         }
@@ -67,9 +67,8 @@ $(document).ready(function(){
             //TODO: add functionality for circle
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
-            if(mousePressed) {
-                context.lineTo(x,y);
-            }
+            tempContext.lineTo(x,y);
+            tempContext.stroke();
         }
         else if (drawing.nextObject == "text" && mousePressed) {
             //TODO
@@ -107,12 +106,11 @@ $(document).ready(function(){
             mousePressed = false;
             context.arc(x1-x0, (y1-y0), ((x1-x0)/2), 0, 2 * Math.PI);
             context.stroke();
-            //context.arc((x1-x0), (y1-y0), ((x1-x0)/2), 0, 2 * Math.PI);
         }
         else if (drawing.nextObject == "pen") {
-            mousePressed = false;
-            //context.closePath();
-            context.stroke();
+            tempContext.closePath();
+            context.drawImage(tempCanvas, 0, 0);
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
         }
         else if (drawing.nextObject == "text") {
             if (currentInputBox) {
