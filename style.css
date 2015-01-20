@@ -21,11 +21,33 @@ h1 {
     width: 300px; padding: 30px; float: left;
 }
 
+canvas {
+    border:2px solid rgb(0, 0, 0);
+}
+
 #Menu {
     padding-top: 5%;
     list-style: none;
     color: white;
     padding-right: 27%;
+}
+
+#canvasContainer {
+    position: relative;
+    height: 510px;
+}
+
+#painter {
+    position: absolute;
+}
+
+#tempPainter {
+    position: absolute;
+}
+
+#clearBtn {
+    position: relative;
+    clear: both;
 }
 
 .paintList {
@@ -35,8 +57,4 @@ h1 {
 
 .paintList li {
     display: inline;
-}
-
-#painter {
-    clear: right;
 }
