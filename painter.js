@@ -11,13 +11,9 @@ $(document).ready(function(){
     var drawing = {
         shapes: [],
         nextObject: "pen",
-        nextColor: "black"
+        nextColor: "black",
+        nextFont: "14px Georgia"
     };
-        //drawAll: function drawAll() {
-        //    for (var i = 0; i < shapes.length; ++i) {
-        //        shapes[i].draw(// TODO: there will be some parameters here...);
-        //    }
-        //}
 
     // Mouse handlers
     $("#tempPainter").mousedown(function(e) {
@@ -38,8 +34,6 @@ $(document).ready(function(){
         else if (drawing.nextObject == "pen") {
             tempContext.beginPath();
             tempContext.moveTo(x0,y0);
-        }
-        else if (drawing.nextObject == "text") {
         }
     });
 
@@ -73,11 +67,7 @@ $(document).ready(function(){
             tempContext.lineTo(x,y);
             tempContext.stroke();
         }
-        else if (drawing.nextObject == "text" && mousePressed) {
-            //TODO
-        }
-        /*
-        else if (3dTool) {
+        else if (drawing.nextObject == "3dTool") { //bonus
             if(mousePressed) {
                 context.beginPath();
                 context.moveTo(x0,y0);
@@ -85,7 +75,6 @@ $(document).ready(function(){
                 context.stroke();
             }
         }
-        */
     });
 
     $("#tempPainter").mouseup(function(e) {
@@ -94,6 +83,8 @@ $(document).ready(function(){
         mousePressed = false;
 
         if (drawing.nextObject == "rect") {
+            mousePressed = false;
+            context.strokeStyle = drawing.nextColor;
             context.fillRect(x0, y0, (x1 - x0), (y1-y0));
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
         }
@@ -126,7 +117,7 @@ $(document).ready(function(){
             currentInputBox.css("top", inputposY);
             currentInputBox.css("left", inputposX);
 
-            $(".canvasdiv").append(currentInputBox);
+            $("#canvascontainer").append(currentInputBox);
             currentInputBox.focus();
         }
     });
@@ -142,7 +133,10 @@ $(document).ready(function(){
     });
 
     function canvastext(left, top, text) {
-        context.font = "14px Georgia";
+        if (text == "3d") { //oooo secret stuff
+            drawing.nextObject = "3dtool";
+        }
+        context.font = drawing.nextFont;
         context.fillText(text, left, top);
     }
 
@@ -152,5 +146,8 @@ $(document).ready(function(){
 
     $(".toolButton").mousedown(function() {
         drawing.nextObject = $(this).attr("data-tooltype");
+    });
+    $(".colorButton").mousedown(function() {
+       drawing.nextColor = $(this).attr("data-tooltype");
     });
 });

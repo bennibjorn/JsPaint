@@ -35,6 +35,8 @@ canvas {
 #canvasContainer {
     position: relative;
     height: 510px;
+    width: 525px;
+    float: left;
 }
 
 #painter {
@@ -48,8 +50,8 @@ canvas {
 #clearBtn {
     position: relative;
     clear: both;
+    float: left;
 }
-
 .paintList {
     list-style-type: none;
     text-align: center;
