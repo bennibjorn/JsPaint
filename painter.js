@@ -19,23 +19,14 @@ $(document).ready(function(){
         //}
 
     // Mouse handlers
-    /*
-    $("#painter").mousemove(function(e) {
-        var mouseX = e.pageX - this.offsetLeft;
-        var mouseY = e.pageY - this.offsetTop;
+    $("#tempPainter").mousedown(function(e) {
+        x0 = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;     //this.offset didn't work :(
+        y0 = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
 
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(mouseX, mouseY);
-        context.stroke();
-    });
-    */
-    $("#painter").mousedown(function(e) {
-        x0 = e.pageX - this.offsetLeft;
-        y0 = e.pageY - this.offsetTop;
-
+        //console.log(x0 + ", " + y0);
         if (drawing.nextObject == "rect") {
-            //Implemented in mouseup
+            mousePressed = true;
+            tempContext.fillStyle = drawing.nextColor;
         }
         else if (drawing.nextObject == "line") {
             //Implemented in mouseup
@@ -55,12 +46,17 @@ $(document).ready(function(){
         }
     });
 
-    $("#painter").mousemove(function(e) {
-        var x = e.pageX - this.offsetLeft;
-        var y = e.pageY - this.offsetTop;
+    $("#tempPainter").mousemove(function(e) {
+        var x = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;
+        var y = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
 
-        if (drawing.nextObject == "rect") {
-            //TODO
+        console.log(x + ", " + y);
+
+        if (drawing.nextObject == "rect" && mousePressed) {
+            //if(mousePressed) {
+                tempContext.clearRect(0, 0, canvas.width, canvas.height);
+                tempContext.fillRect(x0, y0, (x - x0), (y - y0));
+            //}
         }
         else if (drawing.nextObject == "line") {
             //TODO
@@ -88,13 +84,14 @@ $(document).ready(function(){
         */
     });
 
-    $("#painter").mouseup(function(e) {
-        var x1 = e.pageX - this.offsetLeft;
-        var y1 = e.pageY - this.offsetTop;
+    $("#tempPainter").mouseup(function(e) {
+        var x1 = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;
+        var y1 = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
 
         if (drawing.nextObject == "rect") {
-            context.fillStyle = drawing.nextColor;
+            mousePressed = false;
             context.fillRect(x0, y0, (x1 - x0), (y1-y0));
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
         }
         else if (drawing.nextObject == "line") {
             context.beginPath();
