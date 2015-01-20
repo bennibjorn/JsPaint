@@ -1,6 +1,8 @@
 $(document).ready(function(){
     var canvas = document.getElementById("painter");
     var context = canvas.getContext("2d");
+    var tempCanvas = document.getElementById("tempPainter");
+    var tempContext = tempCanvas.getContext("2d");
     var x0 = 0;
     var y0 = 0;
     var mousePressed = false;
@@ -39,7 +41,8 @@ $(document).ready(function(){
             //Implemented in mouseup
         }
         else if (drawing.nextObject == "circle") {
-            //TODO: add functionality for circle
+            mousePressed = true;
+            context.beginPath();
         }
         else if (drawing.nextObject == "pen") {
             mousePressed = true;
@@ -102,7 +105,10 @@ $(document).ready(function(){
             context.stroke();
         }
         else if (drawing.nextObject == "circle") {
-            //TODO: add functionality for circle
+            mousePressed = false;
+            context.arc(x1-x0, (y1-y0), ((x1-x0)/2), 0, 2 * Math.PI);
+            context.stroke();
+            //context.arc((x1-x0), (y1-y0), ((x1-x0)/2), 0, 2 * Math.PI);
         }
         else if (drawing.nextObject == "pen") {
             mousePressed = false;
