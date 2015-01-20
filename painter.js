@@ -23,21 +23,19 @@ $(document).ready(function(){
     $("#tempPainter").mousedown(function(e) {
         x0 = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;     //this.offset didn't work :(
         y0 = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
+        mousePressed = true;
 
         //console.log(x0 + ", " + y0);
         if (drawing.nextObject == "rect") {
-            mousePressed = true;
-            tempContext.fillStyle = drawing.nextColor;
+            //Implemented in mousemove
         }
         else if (drawing.nextObject == "line") {
-            //Implemented in mouseup
+            //Implemented in mousemove
         }
         else if (drawing.nextObject == "circle") {
-            mousePressed = true;
             context.beginPath();
         }
         else if (drawing.nextObject == "pen") {
-            mousePressed = true;
             context.beginPath();
             context.moveTo(x0,y0);
         }
@@ -52,23 +50,28 @@ $(document).ready(function(){
         console.log(x + ", " + y);
 
         if (drawing.nextObject == "rect" && mousePressed) {
-            //if(mousePressed) {
-                tempContext.clearRect(0, 0, canvas.width, canvas.height);
-                tempContext.fillRect(x0, y0, (x - x0), (y - y0));
-            //}
+            tempContext.fillStyle = drawing.nextColor;
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
+            tempContext.fillRect(x0, y0, (x - x0), (y - y0));
         }
-        else if (drawing.nextObject == "line") {
-            //TODO
+        else if (drawing.nextObject == "line" && mousePressed) {
+            tempContext.beginPath();
+            tempContext.strokeStyle = drawing.nextColor;
+            tempContext.moveTo(x0, y0);
+            tempContext.clearRect(0, 0, canvas.width, canvas.height);
+            tempContext.lineTo(x, y);
+            tempContext.stroke();
+            tempContext.closePath();
         }
-        else if (drawing.nextObject == "circle") {
+        else if (drawing.nextObject == "circle" && mousePressed) {
             //TODO: add functionality for circle
         }
-        else if (drawing.nextObject == "pen") {
+        else if (drawing.nextObject == "pen" && mousePressed) {
             if(mousePressed) {
                 context.lineTo(x,y);
             }
         }
-        else if (drawing.nextObject == "text") {
+        else if (drawing.nextObject == "text" && mousePressed) {
             //TODO
         }
         /*
@@ -86,9 +89,9 @@ $(document).ready(function(){
     $("#tempPainter").mouseup(function(e) {
         var x1 = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;
         var y1 = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
+        mousePressed = false;
 
         if (drawing.nextObject == "rect") {
-            mousePressed = false;
             context.fillRect(x0, y0, (x1 - x0), (y1-y0));
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
         }
