@@ -83,28 +83,16 @@ $(document).ready(function(){
         mousePressed = false;
 
         if (drawing.nextObject == "rect") {
-            mousePressed = false;
-            context.strokeStyle = drawing.nextColor;
-            context.fillRect(x0, y0, (x1 - x0), (y1-y0));
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
+            fromTempToCanvas();
         }
         else if (drawing.nextObject == "line") {
-            context.beginPath();
-            context.strokeStyle = drawing.nextColor;
-            context.moveTo(x0, y0);
-            context.lineTo(x1, y1);
-            context.closePath();
-            context.stroke();
+            fromTempToCanvas();
         }
         else if (drawing.nextObject == "circle") {
-            tempContext.closePath();
-            context.drawImage(tempCanvas, 0, 0);
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
+            fromTempToCanvas();
         }
         else if (drawing.nextObject == "pen") {
-            tempContext.closePath();
-            context.drawImage(tempCanvas, 0, 0);
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
+            fromTempToCanvas();
         }
         else if (drawing.nextObject == "text") {
             if (currentInputBox) {
@@ -122,6 +110,12 @@ $(document).ready(function(){
         }
     });
 
+    function fromTempToCanvas() {
+        tempContext.closePath();
+        context.drawImage(tempCanvas, 0, 0);
+        tempContext.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
     $(document).keypress(function(event) {
         if(event.which === 13 && drawing.nextObject == "text") {
             if(currentInputBox) {
@@ -130,6 +124,13 @@ $(document).ready(function(){
                 currentInputBox.remove();
             }
         }
+    });
+
+    $(document).keydown(function(e) {
+       if(e.which == 27) {
+           tempContext.clearRect(0, 0, canvas.width, canvas.height);
+           tempContext.beginPath();
+       }
     });
 
     function canvastext(left, top, text) {
