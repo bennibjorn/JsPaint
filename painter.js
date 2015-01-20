@@ -158,8 +158,8 @@ $(document).ready(function(){
         var easterk = 0;
 
         function lineFill(context) {
-            context.beginPath()
-            context.moveTo(250, 250)
+            context.beginPath();
+            context.moveTo(250, 250);
             context.lineTo(easteri, easterj);
             context.stroke();
 
@@ -175,18 +175,18 @@ $(document).ready(function(){
             } else if(1500 <= easterk && easterk < 2001 ) {
                 easterj--;
                 easterk++;
-            };
+            }
             //console.log(k);
-        };
+        }
 
         function animate(context) {
             lineFill(context);
             requestAnimFrame(function() {
                 if(easterk != 2001) {
                   animate(context);
-                };
+                }
             });
-        };
+        }
 
         animate(context);
     }

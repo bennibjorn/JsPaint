@@ -60,11 +60,14 @@ canvas {
 li {
     list-style-type: none;
 }
-
+.toolButton {
+    box-shadow: 6px 6px 13px #888888;
+}
 .colorPicker button {
     width: 100px;
     text-align: left;
     margin-bottom: 10px;
+    box-shadow: 6px 6px 13px #888888;
 }
 
 .blue {
@@ -79,7 +82,8 @@ li {
     height: 35px;
     background: whitesmoke;
     border-radius: 10px;
+    box-shadow: 6px 6px 13px #888888;
 }
 .selected {
-    background: indianred;
+    background: rgba(74, 75, 73, 0.100);
 }
