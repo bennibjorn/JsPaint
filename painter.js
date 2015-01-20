@@ -197,6 +197,12 @@ $(document).ready(function(){
 
     $(".toolButton").mousedown(function() {
         drawing.nextObject = $(this).attr("data-tooltype");
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        }
+        else {
+            $(this).addClass('selected');
+        }
     });
     $(".colorButton").mousedown(function() {
        drawing.nextColor = $(this).attr("data-tooltype");
