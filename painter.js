@@ -34,13 +34,10 @@ $(document).ready(function(){
         y0 = mouseY;
 
         if (drawing.nextObject == "rect") {
-            context.fillStyle = drawing.nextColor;
-            context.fillRect(mouseX - 30, mouseY - 30, 60, 60);
+            //Implemented in mouseup
         }
         else if (drawing.nextObject == "line") {
-            //TODO: find out how to get mouse starting and ending positions for dragging
-
-
+            //Implemented in mouseup
         }
         else if (drawing.nextObject == "circle") {
             //TODO: add functionality for circle
@@ -59,7 +56,8 @@ $(document).ready(function(){
         var y1 = e.pageY - this.offsetTop;
 
         if (drawing.nextObject == "rect") {
-            //TODO
+            context.fillStyle = drawing.nextColor;
+            context.fillRect(x0, y0, (x1 - x0), (y1-y0));
         }
         else if (drawing.nextObject == "line") {
             context.beginPath();
