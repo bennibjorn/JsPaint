@@ -21,12 +21,6 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
             <a class="navbar-brand" href="#">Painter</a>
         </div>
         <div class="collapse navbar-collapse">
@@ -66,7 +60,7 @@
         </ul>
     </div>
 
-    <div id="canvasContainer">
+    <div class="canvasContainer">
         <canvas id="painter" width="500" height="500"></canvas>
         <canvas id="tempPainter" width="500" height="500"></canvas>
     </div>
@@ -82,13 +76,30 @@
             </li>
             <li>
                 <button type="button" class="btn btn-default btn-lg colorButton" data-tooltype="blue">
-                    <span class="glyphicon glyphicon-tint" aria-hidden="true"></span> Blue
+                    <span class="glyphicon glyphicon-tint blue" aria-hidden="true"></span> Blue
                 </button>
             </li>
             <li>
                 <button type="button" class="btn btn-default btn-lg colorButton" data-tooltype="red">
-                    <span class="glyphicon glyphicon-tint" aria-hidden="true"></span> Red
+                    <span class="glyphicon glyphicon-tint red" aria-hidden="true"></span> Red
                 </button>
+            </li>
+                Font <select>
+                    <option class="fontSelect" data-tooltype="Arial" selected>Arial</option>
+                    <option class="fontSelect" data-tooltype="Georgia">Georgia</option>
+                    <option class="fontSelect" data-tooltype="Tahoma">Tahoma</option>
+                    <option class="fontSelect" data-tooltype="Verdana">Verdana</option>
+
+                </select>
+            <li>
+                Font size <select>
+                    <option class="fontSize" data-tooltype="10px">10px</option>
+                    <option class="fontSize" data-tooltype="12px">12px</option>
+                    <option class="fontSize" data-tooltype="14px" selected>14px</option>
+                    <option class="fontSize" data-tooltype="16px">16px</option>
+                    <option class="fontSize" data-tooltype="18px">18px</option>
+                    <option class="fontSize" data-tooltype="20px">20px</option>
+                </select>
             </li>
         </ul>
     </div>
