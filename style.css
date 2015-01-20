@@ -29,7 +29,6 @@ canvas {
     padding-top: 5%;
     list-style: none;
     color: white;
-    padding-right: 27%;
 }
 
 #canvasContainer {
@@ -52,11 +51,17 @@ canvas {
     clear: both;
     float: left;
 }
-.paintList {
-    list-style-type: none;
-    text-align: center;
-}
 
 .paintList li {
     display: inline;
+    text-align: center;
+}
+
+li {
+    list-style-type: none;
+}
+
+.colorPicker button {
+    width: 100px;
+    text-align: left;
 }
