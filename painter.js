@@ -21,8 +21,8 @@ $(document).ready(function(){
 
     // Mouse handlers
     $("#tempPainter").mousedown(function(e) {
-        x0 = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;     //this.offset didn't work :(
-        y0 = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
+        x0 = e.pageX - $(this).offset().left;
+        y0 = e.pageY - $(this).offset().top;
         mousePressed = true;
 
         //console.log(x0 + ", " + y0);
@@ -44,10 +44,10 @@ $(document).ready(function(){
     });
 
     $("#tempPainter").mousemove(function(e) {
-        var x = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;
-        var y = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
+        var x = e.pageX - $(this).offset().left;
+        var y = e.pageY - $(this).offset().top;
 
-        console.log(x + ", " + y);
+        //console.log(x + ", " + y);
 
         if (drawing.nextObject == "rect" && mousePressed) {
             tempContext.fillStyle = drawing.nextColor;
@@ -89,8 +89,8 @@ $(document).ready(function(){
     });
 
     $("#tempPainter").mouseup(function(e) {
-        var x1 = e.pageX - document.getElementById("tempPainter").getBoundingClientRect().left;
-        var y1 = e.pageY - document.getElementById("tempPainter").getBoundingClientRect().top;
+        var x1 = e.pageX - $(this).offset().left;
+        var y1 = e.pageY - $(this).offset().top;
         mousePressed = false;
 
         if (drawing.nextObject == "rect") {
