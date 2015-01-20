@@ -73,3 +73,13 @@ li {
 .red {
     color: red;
 }
+.fontThings {
+    margin-bottom: 10px;
+    width: 100px;
+    height: 35px;
+    background: whitesmoke;
+    border-radius: 10px;
+}
+.selected {
+    background: indianred;
+}
