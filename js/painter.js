@@ -16,6 +16,14 @@ $(document).ready(function(){
         fontsize: "20px"
     };
 
+    function Shape(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+    }
+
+
+
     // Mouse handlers
     $("#tempPainter").mousedown(function(e) {
         x0 = e.pageX - $(this).offset().left;
@@ -176,7 +184,6 @@ $(document).ready(function(){
                 easterj--;
                 easterk++;
             }
-            //console.log(k);
         }
 
         function animate(context) {
@@ -197,15 +204,13 @@ $(document).ready(function(){
 
     $(".toolButton").mousedown(function() {
         drawing.nextObject = $(this).attr("data-tooltype");
-        if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
-        }
-        else {
-            $(this).addClass('selected');
-        }
+        $(".toolButton").removeClass("selected");
+        $(this).addClass("selected");
     });
     $(".colorButton").mousedown(function() {
-       drawing.nextColor = $(this).attr("data-tooltype");
+        drawing.nextColor = $(this).attr("data-tooltype");
+        $(".colorButton").removeClass("selected");
+        $(this).addClass("selected");
     });
     $(".fontSize").mousedown(function() {
         drawing.fontsize = $(this).attr("data-tooltype");
