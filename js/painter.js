@@ -10,10 +10,12 @@ $(document).ready(function(){
     var currentInputBox;
     var drawing = {
         shapes: [],
+        temp: [],
         nextObject: "pen",
         nextColor: "black",
         nextFont: "Georgia",
-        fontsize: "20px"
+        fontSize: "20px",
+        lineWidth: 5
     };
 
     function Shape(x, y, color) {
@@ -21,8 +23,6 @@ $(document).ready(function(){
         this.y = y;
         this.color = color;
     }
-
-
 
     // Mouse handlers
     $("#tempPainter").mousedown(function(e) {
@@ -53,9 +53,10 @@ $(document).ready(function(){
         //console.log(x + ", " + y);
 
         if (drawing.nextObject == "rect" && mousePressed) {
-            tempContext.fillStyle = drawing.nextColor;
+            tempContext.strokeStyle = drawing.nextColor;
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
-            tempContext.fillRect(x0, y0, (x - x0), (y - y0));
+            tempContext.strokeRect(x0, y0, (x - x0), (y - y0));
+            tempContext.lineWidth = drawing.lineWidth;
         }
         else if (drawing.nextObject == "line" && mousePressed) {
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,17 +66,20 @@ $(document).ready(function(){
             tempContext.lineTo(x, y);
             tempContext.stroke();
             tempContext.closePath();
+            tempContext.lineWidth = drawing.lineWidth;
         }
         else if (drawing.nextObject == "circle" && mousePressed) {
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
             tempContext.beginPath();
             tempContext.arc(Math.abs(x-x0), Math.abs(y-y0), Math.abs((x-x0)/2), 0, 2 * Math.PI);
             tempContext.stroke();
+            tempContext.lineWidth = drawing.lineWidth;
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
             tempContext.lineTo(x,y);
             tempContext.strokeStyle = drawing.nextColor;
             tempContext.stroke();
+            tempContext.lineWidth = drawing.lineWidth;
         }
         else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
             context.beginPath();
@@ -120,7 +124,7 @@ $(document).ready(function(){
 
     function fromTempToCanvas() {
         tempContext.closePath();
-        context.drawImage(tempCanvas, 0, 0);
+        drawing.shapes.push(context.drawImage(tempCanvas, 0, 0));
         tempContext.clearRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -148,7 +152,7 @@ $(document).ready(function(){
             alert("Enjoy your Easter egg");
             return;
         } else if (text == "easterFill") { easterFill(); return; }
-        context.font = drawing.fontsize + ' ' + drawing.nextFont;
+        context.font = drawing.fontSize + ' ' + drawing.nextFont;
         context.fillStyle = drawing.nextColor;
         context.fillText(text, left, top);
     }
@@ -197,9 +201,14 @@ $(document).ready(function(){
 
         animate(context);
     }
-
+    function clear() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
     $("#clearBtn").mousedown(function() {
-       context.clearRect(0, 0, canvas.width, canvas.height);
+        clear();
+        while (drawing.shapes.length > 0) {
+            drawing.shapes.pop();
+        }
     });
 
     $(".toolButton").mousedown(function() {
@@ -213,9 +222,23 @@ $(document).ready(function(){
         $(this).addClass("selected");
     });
     $(".fontSize").mousedown(function() {
-        drawing.fontsize = $(this).attr("data-tooltype");
+        drawing.fontSize = $(this).attr("data-tooltype");
     });
     $(".fontSelect").mousedown(function() {
         drawing.nextFont = $(this).attr("data-tooltype");
+    });
+    $(".undo").mousedown(function () {
+        drawing.temp.push(drawing.shapes.pop);
+        clear();
+        for (var i = 0; i < drawing.shapes.length(); i++) {
+            context.drawImage(drawing.shapes[i], 0, 0);
+        }
+    });
+    $(".redo").mousedown(function () {
+        drawing.shapes.push(drawing.temp.pop);
+        clear();
+        for (var i = 0; i < drawing.shapes.length(); i++) {
+            context.drawImage(drawing.shapes[i], 0, 0);
+        }
     });
 });
