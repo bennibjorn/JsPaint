@@ -78,9 +78,29 @@ $(document).ready(function(){
         }
     });
 
-    function Pen(arr) {
-        //TODO
-    }
+    var Pen = Shape.extend({
+        constructor: function(x, y, color, lw) {
+            this.base(x, y, color, lw);
+            this.arr = [];
+        },
+        arr: [],
+
+        draw: function() {
+            context.beginPath();
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
+            context.moveTo(this.x0, this.y0);
+
+            for(var i = 0; i < this.arr.length; i++) { // Line to every point the mouse moved to while pressed
+                var x = this.arr[i].x;
+                var y = this.arr[i].y;
+                context.lineTo(x, y);
+            }
+
+            context.stroke();
+            context.closePath();
+        }
+    });
 
     // DrawEllipse function gotten from http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas/2173084#2173084 through link in slides
     function drawEllipse(ctx, x, y, w, h, lw, c) {
@@ -120,6 +140,7 @@ $(document).ready(function(){
             drawing.shapes.push(new Circle(x0, y0, 0, 0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "pen") {
+            drawing.shapes.push(new Pen(x0, y0, drawing.nextColor, drawing.lineWidth));
             tempContext.beginPath();
             tempContext.moveTo(x0,y0);
         }
@@ -152,10 +173,13 @@ $(document).ready(function(){
             drawEllipse(tempContext, x0, y0, (x-x0), (y-y0), drawing.lineWidth, drawing.nextColor);
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
+            drawing.shapes[drawing.shapes.length - 1].arr.push({x: x, y: y});
+
             tempContext.lineTo(x,y);
             tempContext.strokeStyle = drawing.nextColor;
-            tempContext.stroke();
             tempContext.lineWidth = drawing.lineWidth;
+            tempContext.stroke();
+
         }
         else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
             context.beginPath();
@@ -198,7 +222,7 @@ $(document).ready(function(){
             drawing.shapes.push(c);
         }
         else if (drawing.nextObject == "pen") {
-            fromTempToCanvas();
+            drawing.shapes[drawing.shapes.length - 1].draw();
         }
         else if (drawing.nextObject == "text") {
             if (currentInputBox) {
