@@ -18,11 +18,71 @@ $(document).ready(function(){
         lineWidth: 5
     };
 
-    function Shape(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
+    var Shape = Base.extend({
+        constructor: function(x, y, color, lw) {
+            this.x0 = x;
+            this.y0 = y;
+            this.color = color;
+            this.lineWidth = lw;
+        },
+        x0: 0,
+        y0: 0,
+        color: "black",
+        lineWidth: 1
+    });
+
+
+
+    var Rect = Shape.extend({
+        constructor: function(x, y, h, w, color, lw) {
+            this.base(x, y, color, lw);
+            this.height = h;
+            this.width = w;
+        },
+        height: 0,
+        width: 0,
+
+        draw: function() {
+            context.fillStyle = this.color;
+            context.fillRect(this.x0, this.y0, this.width, this.height);
+        }
+    });
+
+    var Circle = Rect.extend({
+        constructor: function(x, y, h, w, color, lw) {
+            this.base(x, y, h, w, color, lw);
+        },
+
+        draw: function() {
+            drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color);
+        },
+    });
+
+    var Line = Shape.extend({
+        constructor: function(x, y, x1, y1, color, lw) {
+            this.base(x, y, color, lw);
+            this.x1 = x1;
+            this.y1 = y1;
+        },
+        x1: 0,
+        y1: 0,
+
+        draw: function() {
+            context.beginPath();
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
+            context.moveTo(this.x0, this.y0);
+            context.lineTo(this.x1, this.y1);
+            context.stroke();
+            context.closePath();
+        }
+    });
+
+    function Pen(arr) {
+        //TODO
     }
+
+
 
     // Mouse handlers
     $("#tempPainter").mousedown(function(e) {
@@ -32,13 +92,13 @@ $(document).ready(function(){
 
         //console.log(x0 + ", " + y0);
         if (drawing.nextObject == "rect") {
-            //Implemented in mousemove
+            drawing.shapes.push(new Rect(x0, y0, 0, 0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "line") {
-            //Implemented in mousemove
+            drawing.shapes.push(new Line(x0, y0, x0, y0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "circle") {
-            //Implemented in mousemove
+            drawing.shapes.push(new Circle(x0, y0, 0, 0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "pen") {
             tempContext.beginPath();
@@ -70,10 +130,7 @@ $(document).ready(function(){
         }
         else if (drawing.nextObject == "circle" && mousePressed) {
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
-            tempContext.beginPath();
-            tempContext.arc(Math.abs(x-x0), Math.abs(y-y0), Math.abs((x-x0)/2), 0, 2 * Math.PI);
-            tempContext.stroke();
-            tempContext.lineWidth = drawing.lineWidth;
+            drawEllipse(tempContext, x0, y0, (x-x0), (y-y0), drawing.lineWidth, drawing.nextColor);
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
             tempContext.lineTo(x,y);
@@ -95,13 +152,31 @@ $(document).ready(function(){
         mousePressed = false;
 
         if (drawing.nextObject == "rect") {
-            fromTempToCanvas();
+            var r = drawing.shapes.pop();
+            r.x1 = x1;
+            r.y1 = y1;
+            r.width = (x1 - r.x0);
+            r.height = (y1 - r.y0);
+            r.draw();
+            drawing.shapes.push(r);
         }
         else if (drawing.nextObject == "line") {
-            fromTempToCanvas();
+            tempContext.clearRect(0, 0, canvas.width, canvas.height); // Temp fix for line not going away
+
+            var l = drawing.shapes.pop();
+            l.x1 = x1;
+            l.y1 = y1;
+            l.draw();
+            drawing.shapes.push(l);
         }
         else if (drawing.nextObject == "circle") {
-            fromTempToCanvas();
+            var c = drawing.shapes.pop();
+            c.x1 = x1;
+            c.y1 = y1;
+            c.width = (x1 - c.x0);
+            c.height = (y1 - c.y0);
+            c.draw();
+            drawing.shapes.push(c);
         }
         else if (drawing.nextObject == "pen") {
             fromTempToCanvas();
@@ -124,7 +199,7 @@ $(document).ready(function(){
 
     function fromTempToCanvas() {
         tempContext.closePath();
-        drawing.shapes.push(context.drawImage(tempCanvas, 0, 0));
+        context.drawImage(tempCanvas, 0, 0);
         tempContext.clearRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -158,7 +233,7 @@ $(document).ready(function(){
     }
 
     function easterFill() {
-        window.requestAnimFrame = (function(callback) {
+        window.requestAnimFrame = (function() {
             return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
             function(callback) {
                 window.setTimeout(callback, 1000 / 60);
@@ -192,7 +267,7 @@ $(document).ready(function(){
 
         function animate(context) {
             lineFill(context);
-            requestAnimFrame(function() {
+            window.requestAnimFrame(function() {
                 if(easterk != 2001) {
                   animate(context);
                 }
