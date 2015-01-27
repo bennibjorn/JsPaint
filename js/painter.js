@@ -58,7 +58,7 @@ $(document).ready(function(){
             context.strokeStyle = this.color;
             context.lineWidth = this.lineWidth;
             drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color);
-        },
+        }
     });
 
     var Line = Shape.extend({
@@ -253,8 +253,8 @@ $(document).ready(function(){
         if(event.which === 13 && drawing.nextObject == "text") {
             if(currentInputBox) {
                 var inputBoxOffset = currentInputBox.offset();
-                canvastext(inputBoxOffset.left, inputBoxOffset.top, currentInputBox.val());
-                //canvastext(x1, y1, currentInputBox.val());
+                canvasText(inputBoxOffset.left, inputBoxOffset.top, currentInputBox.val());
+                //canvasText(x1, y1, currentInputBox.val());
                 currentInputBox.remove();
             }
         }
@@ -267,7 +267,7 @@ $(document).ready(function(){
        }
     });
 
-    function canvastext(left, top, text) {
+    function canvasText(left, top, text) {
         if (text == "3d") { //oooo secret stuff
             drawing.nextObject = "3dTool";
             alert("Enjoy your Easter egg");
