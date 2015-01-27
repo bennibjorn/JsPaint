@@ -13,40 +13,10 @@ $(document).ready(function(){
         nextObject: "pen",
         nextColor: "black",
         nextFont: "Georgia",
-        fontsize: "20px"
+        fontsize: "20px",
+        lineWidth: 5
     };
 
-    /*
-    var Animal = Base.extend({
-  constructor: function(name) {
-    this.name = name;
-  },
-
-  name: "",
-
-  eat: function() {
-    this.say("Yum!");
-  },
-
-  say: function(message) {
-    alert(this.name + ": " + message);
-  }
-});
-
-var Cat = Animal.extend({
-  eat: function(food) {
-    if (food instanceof Mouse) this.base();
-    else this.say("Yuk! I only eat mice.");
-  }
-});
-
-    $.getScript("base.js", function(){
-
-       alert("Script loaded and executed.");
-
-       // Use anything defined in the loaded script...
-    });
-*/
     var Shape = Base.extend({
         constructor: function(x, y, color, lw) {
             this.x0 = x;
@@ -57,7 +27,7 @@ var Cat = Animal.extend({
         x0: 0,
         y0: 0,
         color: "black",
-        lw: 1
+        lineWidth: 1
     });
 
 
@@ -77,19 +47,14 @@ var Cat = Animal.extend({
         }
     });
 
-    var Circle = Shape.extend({
-        constructor: function(x, y, r, color, lw) {
-            this.base(x, y, color, lw);
-            this.radius = r;
+    var Circle = Rect.extend({
+        constructor: function(x, y, h, w, color, lw) {
+            this.base(x, y, h, w, color, lw);
         },
-        radius: 0,
 
         draw: function() {
-            context.fillStyle = this.color;
-            context.beginPath();
-            context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-            context.stroke();
-        }
+            drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color);
+        },
     });
 
     var Line = Shape.extend({
@@ -102,15 +67,15 @@ var Cat = Animal.extend({
         y1: 0,
 
         draw: function() {
-            //TODO
+            context.beginPath();
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
+            context.moveTo(this.x0, this.y0);
+            context.lineTo(this.x1, this.y1);
+            context.stroke();
+            context.closePath();
         }
-
-
     });
-
-    function Line(x0, y0, x1, y1) {
-        //TODO
-    }
 
     function Pen(arr) {
         //TODO
@@ -118,6 +83,27 @@ var Cat = Animal.extend({
 
     function Text() {
         //TODO
+    }
+
+    // DrawEllipse function gotten from http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas/2173084#2173084 through link in slides
+    function drawEllipse(ctx, x, y, w, h, lw, c) {
+        var kappa = 0.5522848,
+            ox = (w / 2) * kappa, // control point offset horizontal
+            oy = (h / 2) * kappa, // control point offset vertical
+            xe = x + w,           // x-end
+            ye = y + h,           // y-end
+            xm = x + w / 2,       // x-middle
+            ym = y + h / 2;       // y-middle
+
+        ctx.beginPath();
+        ctx.moveTo(x, ym);
+        ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+        ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+        ctx.strokeStyle = c;
+        ctx.lineWidth = lw;
+        ctx.stroke();
     }
 
 
@@ -130,13 +116,13 @@ var Cat = Animal.extend({
 
         //console.log(x0 + ", " + y0);
         if (drawing.nextObject == "rect") {
-            drawing.shapes.push(new Rect(x0, y0, 0, 0, drawing.nextColor));
+            drawing.shapes.push(new Rect(x0, y0, 0, 0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "line") {
-            //Implemented in mousemove
+            drawing.shapes.push(new Line(x0, y0, x0, y0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "circle") {
-            //Implemented in mousemove
+            drawing.shapes.push(new Circle(x0, y0, 0, 0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "pen") {
             tempContext.beginPath();
@@ -166,9 +152,7 @@ var Cat = Animal.extend({
         }
         else if (drawing.nextObject == "circle" && mousePressed) {
             tempContext.clearRect(0, 0, canvas.width, canvas.height);
-            tempContext.beginPath();
-            tempContext.arc(Math.abs(x-x0), Math.abs(y-y0), Math.abs((x-x0)/2), 0, 2 * Math.PI);
-            tempContext.stroke();
+            drawEllipse(tempContext, x0, y0, (x-x0), (y-y0), drawing.lineWidth, drawing.nextColor);
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
             tempContext.lineTo(x,y);
@@ -198,10 +182,22 @@ var Cat = Animal.extend({
             drawing.shapes.push(r);
         }
         else if (drawing.nextObject == "line") {
-            fromTempToCanvas();
+            tempContext.clearRect(0, 0, canvas.width, canvas.height); // Temp fix for line not going away
+
+            var l = drawing.shapes.pop();
+            l.x1 = x1;
+            l.y1 = y1;
+            l.draw();
+            drawing.shapes.push(l);
         }
         else if (drawing.nextObject == "circle") {
-            fromTempToCanvas();
+            var c = drawing.shapes.pop();
+            c.x1 = x1;
+            c.y1 = y1;
+            c.width = (x1 - c.x0);
+            c.height = (y1 - c.y0);
+            c.draw();
+            drawing.shapes.push(c);
         }
         else if (drawing.nextObject == "pen") {
             fromTempToCanvas();
