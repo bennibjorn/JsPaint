@@ -16,10 +16,108 @@ $(document).ready(function(){
         fontsize: "20px"
     };
 
-    function Shape(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
+    /*
+    var Animal = Base.extend({
+  constructor: function(name) {
+    this.name = name;
+  },
+
+  name: "",
+
+  eat: function() {
+    this.say("Yum!");
+  },
+
+  say: function(message) {
+    alert(this.name + ": " + message);
+  }
+});
+
+var Cat = Animal.extend({
+  eat: function(food) {
+    if (food instanceof Mouse) this.base();
+    else this.say("Yuk! I only eat mice.");
+  }
+});
+
+    $.getScript("base.js", function(){
+
+       alert("Script loaded and executed.");
+
+       // Use anything defined in the loaded script...
+    });
+*/
+    var Shape = Base.extend({
+        constructor: function(x, y, color, lw) {
+            this.x0 = x;
+            this.y0 = y;
+            this.color = color;
+            this.lineWidth = lw;
+        },
+        x0: 0,
+        y0: 0,
+        color: "black",
+        lw: 1
+    });
+
+
+
+    var Rect = Shape.extend({
+        constructor: function(x, y, h, w, color, lw) {
+            this.base(x, y, color, lw);
+            this.height = h;
+            this.width = w;
+        },
+        height: 0,
+        width: 0,
+
+        draw: function() {
+            context.fillStyle = this.color;
+            context.fillRect(this.x0, this.y0, this.width, this.height);
+        }
+    });
+
+    var Circle = Shape.extend({
+        constructor: function(x, y, r, color, lw) {
+            this.base(x, y, color, lw);
+            this.radius = r;
+        },
+        radius: 0,
+
+        draw: function() {
+            context.fillStyle = this.color;
+            context.beginPath();
+            context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+            context.stroke();
+        }
+    });
+
+    var Line = Shape.extend({
+        constructor: function(x, y, x1, y1, color, lw) {
+            this.base(x, y, color, lw);
+            this.x1 = x1;
+            this.y1 = y1;
+        },
+        x1: 0,
+        y1: 0,
+
+        draw: function() {
+            //TODO
+        }
+
+
+    });
+
+    function Line(x0, y0, x1, y1) {
+        //TODO
+    }
+
+    function Pen(arr) {
+        //TODO
+    }
+
+    function Text() {
+        //TODO
     }
 
 
@@ -32,7 +130,7 @@ $(document).ready(function(){
 
         //console.log(x0 + ", " + y0);
         if (drawing.nextObject == "rect") {
-            //Implemented in mousemove
+            drawing.shapes.push(new Rect(x0, y0, 0, 0, drawing.nextColor));
         }
         else if (drawing.nextObject == "line") {
             //Implemented in mousemove
@@ -91,7 +189,13 @@ $(document).ready(function(){
         mousePressed = false;
 
         if (drawing.nextObject == "rect") {
-            fromTempToCanvas();
+            var r = drawing.shapes.pop();
+            r.x1 = x1;
+            r.y1 = y1;
+            r.width = (x1 - r.x0);
+            r.height = (y1 - r.y0);
+            r.draw();
+            drawing.shapes.push(r);
         }
         else if (drawing.nextObject == "line") {
             fromTempToCanvas();
@@ -154,7 +258,7 @@ $(document).ready(function(){
     }
 
     function easterFill() {
-        window.requestAnimFrame = (function(callback) {
+        window.requestAnimFrame = (function() {
             return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
             function(callback) {
                 window.setTimeout(callback, 1000 / 60);
@@ -188,7 +292,7 @@ $(document).ready(function(){
 
         function animate(context) {
             lineFill(context);
-            requestAnimFrame(function() {
+            window.requestAnimFrame(function() {
                 if(easterk != 2001) {
                   animate(context);
                 }
