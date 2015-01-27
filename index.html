@@ -117,6 +117,57 @@
             </li>
         </ul>
     </div>
+
+    <!--    Save + Load -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveModal">
+        Save
+    </button>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loadModal">
+        Load
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Save</h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-group">
+                <input type="text" class="form-control" id="saveUsername" placeholder="Enter username" required>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="saveTitle" placeholder="Enter title" required>
+              </div>
+          </div>
+          <div class="modal-footer row">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveButton">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Load</h4>
+          </div>
+          <div class="modal-body loadList">
+              <div class="form-group">
+                <input type="text" class="form-control" id="loadUsername" placeholder="Enter username" required>
+              </div>
+              <button type="button" class="btn btn-primary" id="loadListButton">Load selected</button>
+          </div>
+          <div class="modal-footer row">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="loadSelectedButton">Load selected</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 <!-- /.container -->
 

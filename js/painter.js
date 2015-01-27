@@ -381,5 +381,104 @@ $(document).ready(function(){
         temp.draw();
     });
 
+    // Save API
+    $('#saveModal').on('shown.bs.modal', function () {
+        $('#saveUsername').focus();
+    });
+    $("#saveButton").mouseup(function() {
+        var username = $("#saveUsername").val();
+        var title = $("#saveTitle").val();
+        var stringifiedArray = JSON.stringify(drawing.shapes);
 
+        var param = {
+            "user": username,
+            "name": title,
+            "content": stringifiedArray,
+            "template": false
+        };
+
+        $.ajax({
+				type: "POST",
+				contentType: "application/json; charset=utf-8",
+				url: "http://whiteboard.apphb.com/Home/Save",
+				data: param,
+				dataType: "jsonp",
+				crossDomain: true,
+				success: function () {
+                    $('#saveModal').modal('hide');
+				},
+				error: function (xhr, err) {
+                    alert("Sorry didn't work :(");
+                    console.log("xhr: " + xhr);
+                    console.log("err: " + err);
+				}
+			});
+
+    });
+
+    // Load API
+    $('#loadModal').on('shown.bs.modal', function () {
+        $('#loadUsername').focus();
+    });
+    $("#loadListButton").mouseup(function() {
+        var username = $("#loadUsername").val();
+
+        var param = {
+            "user": username,
+            "template": false
+        };
+
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "http://whiteboard.apphb.com/Home/GetList",
+            data: param,
+            dataType: "jsonp",
+            crossDomain: true,
+            success: function (data) {
+                // The save was successful...
+                console.log(data);
+                printLoadList(data);
+            },
+            error: function (xhr, err) {
+                // Something went wrong...
+                alert("Save didn't work" + "\n" + xhr + "\n" + err);
+            }
+        });
+    });
+
+    var whiteboardID = 0;
+    function printLoadList(data) {
+        var loadedList = [];
+        for(var i = 0; i < data.length; i++) {
+            loadedList.push('<button type="button" class="btn btn-default btn-block loadWhiteboardButton" data-whiteboardID="' + data[i].ID + '">' + data[i].WhiteboardTitle + '</button>');
+        }
+        loadedList.join("");
+
+        $(".loadList").html(loadedList);
+
+        $(".loadWhiteboardButton").mouseup(function() {
+            whiteboardID = $(this).attr("data-whiteboardID");
+        });
+    }
+
+    $("#loadSelectedButton").mouseup(function() {
+         $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "http://whiteboard.apphb.com/Home/GetWhiteboard",
+            data: {"ID": whiteboardID},
+            dataType: "jsonp",
+            crossDomain: true,
+            success: function (data) {
+                // The save was successful...
+                console.log(data);
+                console.log(drawing.shapes);
+            },
+            error: function (xhr, err) {
+                // Something went wrong...
+                alert("Save didn't work" + "\n" + xhr + "\n" + err);
+            }
+        });
+    });
 });
