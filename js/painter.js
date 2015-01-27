@@ -1,4 +1,4 @@
-$(document).ready(function(){
+//$(document).ready(function(){
     var canvas = document.getElementById("painter");
     var context = canvas.getContext("2d");
     var tempCanvas = document.getElementById("tempPainter");
@@ -246,7 +246,8 @@ $(document).ready(function(){
             alert("Enjoy your Easter egg");
             return;
         } else if (text == "easterFill") { easterFill(); return; }
-        context.font = drawing.fontSize + ' ' + drawing.nextFont;
+        context.font = drawing.nextFont;
+        context.fontSize = drawing.fontSize;
         context.fillStyle = drawing.nextColor;
         context.fillText(text, left, top);
     }
@@ -297,6 +298,8 @@ $(document).ready(function(){
     }
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+        tempContext.clearRect(0, 0, canvas.width, canvas.height);
+
     }
     $("#clearBtn").mousedown(function() {
         clear();
@@ -315,24 +318,29 @@ $(document).ready(function(){
         $(".colorButton").removeClass("selected");
         $(this).addClass("selected");
     });
-    $(".fontSize").mousedown(function() {
-        drawing.fontSize = $(this).attr("data-tooltype");
+    $(".lineWidth").click(function () {
+        //drawing.lineWidth = $(this).value();
+        drawing.lineWidth = document.getElementById("lW").value;
     });
-    $(".fontSelect").mousedown(function() {
+    $(".fontSize").mouseup(function() {
+        //drawing.fontSize = $(this).attr("data-tooltype");
+        drawing.fontSize = document.getElementsByClassName(".fontSize");
+    });
+    $(".fontSelect").mouseup(function() {
         drawing.nextFont = $(this).attr("data-tooltype");
     });
     $(".undo").mousedown(function () {
         drawing.temp.push(drawing.shapes.pop);
         clear();
         for (var i = 0; i < drawing.shapes.length(); i++) {
-            context.drawImage(drawing.shapes[i], 0, 0);
+            drawing.shapes[i].draw();
         }
     });
     $(".redo").mousedown(function () {
         drawing.shapes.push(drawing.temp.pop);
         clear();
         for (var i = 0; i < drawing.shapes.length(); i++) {
-            context.drawImage(drawing.shapes[i], 0, 0);
+            drawing.shapes[i].draw();
         }
     });
-});
+//});
