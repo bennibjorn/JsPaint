@@ -43,8 +43,9 @@ $(document).ready(function(){
         width: 0,
 
         draw: function() {
-            context.fillStyle = this.color;
-            context.fillRect(this.x0, this.y0, this.width, this.height);
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
+            context.strokeRect(this.x0, this.y0, this.width, this.height);
         }
     });
 
