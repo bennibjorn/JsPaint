@@ -1,4 +1,4 @@
-//$(document).ready(function(){
+$(document).ready(function(){
     var canvas = document.getElementById("painter");
     var context = canvas.getContext("2d");
     var tempCanvas = document.getElementById("tempPainter");
@@ -44,6 +44,7 @@
 
         draw: function() {
             context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
             context.strokeRect(this.x0, this.y0, this.width, this.height);
         }
     });
@@ -54,6 +55,8 @@
         },
 
         draw: function() {
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
             drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color);
         }
     });
@@ -78,9 +81,57 @@
         }
     });
 
-    function Pen(arr) {
-        //TODO
-    }
+    var Pen = Shape.extend({
+        constructor: function(x, y, color, lw) {
+            this.base(x, y, color, lw);
+            this.arr = [];
+        },
+        arr: [],
+
+        draw: function() {
+            context.beginPath();
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
+            context.moveTo(this.x0, this.y0);
+
+            for(var i = 0; i < this.arr.length; i++) { // Line to every point the mouse moved to while pressed
+                var x = this.arr[i].x;
+                var y = this.arr[i].y;
+                context.lineTo(x, y);
+            }
+
+            context.stroke();
+            context.closePath();
+        }
+    });
+
+    var Text = Shape.extend({
+        constructor: function(x, y, font, fontSize, text, color, lw) {
+            this.base(x, y, color, lw);
+            this.font = font;
+            this.fontSize = fontSize;
+            this.text = text;
+        },
+        font: "Arial",
+        fontSize: "14px",
+        text: "",
+
+        draw: function() {
+            if (this.text === "3d") { //oooo secret stuff
+                drawing.nextObject = "3dTool";
+                alert("Enjoy your Easter egg");
+                return;
+            }
+            else if (this.text === "easterFill") {
+                easterFill();
+                return;
+            }
+
+            context.font = this.fontSize + ' ' + this.font;
+            context.fillStyle = drawing.nextColor;
+            context.fillText(this.text, this.x0, this.y0);
+        }
+    });
 
     // DrawEllipse function gotten from http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas/2173084#2173084 through link in slides
     function drawEllipse(ctx, x, y, w, h, lw, c) {
@@ -120,16 +171,19 @@
             drawing.shapes.push(new Circle(x0, y0, 0, 0, drawing.nextColor, drawing.lineWidth));
         }
         else if (drawing.nextObject == "pen") {
+            drawing.shapes.push(new Pen(x0, y0, drawing.nextColor, drawing.lineWidth));
             tempContext.beginPath();
             tempContext.moveTo(x0,y0);
+        }
+        else if (drawing.nextObject == "text") {
+            // x, y, font, fontSize, text, color, lw
+            drawing.shapes.push(new Text(x0, y0, drawing.nextFont, drawing.fontSize, "", drawing.nextColor, drawing.lineWidth));
         }
     });
 
     $("#tempPainter").mousemove(function(e) {
         var x = e.pageX - $(this).offset().left;
         var y = e.pageY - $(this).offset().top;
-
-        //console.log(x + ", " + y);
 
         if (drawing.nextObject == "rect" && mousePressed) {
             tempContext.strokeStyle = drawing.nextColor;
@@ -152,10 +206,13 @@
             drawEllipse(tempContext, x0, y0, (x-x0), (y-y0), drawing.lineWidth, drawing.nextColor);
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
+            drawing.shapes[drawing.shapes.length - 1].arr.push({x: x, y: y});
+
             tempContext.lineTo(x,y);
             tempContext.strokeStyle = drawing.nextColor;
-            tempContext.stroke();
             tempContext.lineWidth = drawing.lineWidth;
+            tempContext.stroke();
+
         }
         else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
             context.beginPath();
@@ -170,6 +227,8 @@
         var y1 = e.pageY - $(this).offset().top;
         mousePressed = false;
 
+        tempContext.clearRect(0, 0, canvas.width, canvas.height); // Cleaning up
+
         if (drawing.nextObject == "rect") {
             var r = drawing.shapes.pop();
             r.x1 = x1;
@@ -180,8 +239,6 @@
             drawing.shapes.push(r);
         }
         else if (drawing.nextObject == "line") {
-            tempContext.clearRect(0, 0, canvas.width, canvas.height); // Temp fix for line not going away
-
             var l = drawing.shapes.pop();
             l.x1 = x1;
             l.y1 = y1;
@@ -198,14 +255,14 @@
             drawing.shapes.push(c);
         }
         else if (drawing.nextObject == "pen") {
-            fromTempToCanvas();
+            drawing.shapes[drawing.shapes.length - 1].draw();
         }
         else if (drawing.nextObject == "text") {
             if (currentInputBox) {
                 currentInputBox.remove();
             }
-            var inputposY = y1 + 120;
-            var inputposX = x1 + 40;
+            var inputposY = e.pageY - 20;   // -20 so the canvas text is at the same place as the input box
+            var inputposX = e.pageX;
             currentInputBox = $("<input />");
             currentInputBox.css("position", "fixed");
             currentInputBox.css("top", inputposY);
@@ -213,30 +270,30 @@
 
             $(".canvasContainer").append(currentInputBox);
             currentInputBox.focus();
+            // Continues after user presses ENTER
         }
     });
 
-    function fromTempToCanvas() {
-        tempContext.closePath();
-        context.drawImage(tempCanvas, 0, 0);
-        tempContext.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
+    // ENTER function for text-input
     $(document).keypress(function(event) {
         if(event.which === 13 && drawing.nextObject == "text") {
             if(currentInputBox) {
-                var inputBoxOffset = currentInputBox.offset();
-                canvasText(inputBoxOffset.left, inputBoxOffset.top, currentInputBox.val());
-                //canvasText(x1, y1, currentInputBox.val());
+                var t = drawing.shapes.pop();
+                t.text = currentInputBox.val();
+                t.draw();
+                drawing.shapes.push(t);
+
                 currentInputBox.remove();
             }
         }
     });
 
+    // ESC function
     $(document).keydown(function(e) {
        if(e.which == 27) {
            tempContext.clearRect(0, 0, canvas.width, canvas.height);
            tempContext.beginPath();
+           drawing.shapes.pop();
        }
     });
 
@@ -246,8 +303,7 @@
             alert("Enjoy your Easter egg");
             return;
         } else if (text == "easterFill") { easterFill(); return; }
-        context.font = drawing.nextFont;
-        context.fontSize = drawing.fontSize;
+        context.font = drawing.fontSize + ' ' + drawing.nextFont;
         context.fillStyle = drawing.nextColor;
         context.fillText(text, left, top);
     }
@@ -340,7 +396,7 @@
         drawing.shapes.push(drawing.temp.pop);
         clear();
         for (var i = 0; i < drawing.shapes.length(); i++) {
-            drawing.shapes[i].draw();
+            context.drawImage(drawing.shapes[i], 0, 0);
         }
     });
-//});
+});
