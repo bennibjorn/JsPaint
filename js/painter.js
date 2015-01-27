@@ -10,7 +10,7 @@ $(document).ready(function(){
     var currentInputBox;
     var drawing = {
         shapes: [],
-        temp: [],
+        redo: [],
         nextObject: "pen",
         nextColor: "black",
         nextFont: "Georgia",
@@ -368,17 +368,18 @@ $(document).ready(function(){
         drawing.nextFont = $(this).attr("data-tooltype");
     });
     $(".undo").mousedown(function () {
-        drawing.temp.push(drawing.shapes.pop);
+        var temp = drawing.shapes.pop();
+        drawing.redo.push(temp);
         clear();
-        for (var i = 0; i < drawing.shapes.length(); i++) {
-            context.drawImage(drawing.shapes[i], 0, 0);
+        for(var i = 0; i < drawing.shapes.length; i++) {
+            drawing.shapes[i].draw();
         }
     });
     $(".redo").mousedown(function () {
-        drawing.shapes.push(drawing.temp.pop);
-        clear();
-        for (var i = 0; i < drawing.shapes.length(); i++) {
-            context.drawImage(drawing.shapes[i], 0, 0);
-        }
+        var temp = drawing.redo.pop();
+        drawing.shapes.push(temp);
+        temp.draw();
     });
+
+
 });
