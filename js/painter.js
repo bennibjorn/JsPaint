@@ -55,6 +55,8 @@ $(document).ready(function(){
         },
 
         draw: function() {
+            context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
             drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color);
         },
     });
