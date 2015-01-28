@@ -84,25 +84,28 @@
                     <span class="glyphicon glyphicon-tint red" aria-hidden="true"></span> Red
                 </button>
             </li>
-            <li>
-                <p>Line Width:</p>
-            </li>
+            <li role="presentation"><a href="#">Line Width: <span class="badge">5</span></a></li>
             <li>
                 <div class="input-group lineWidth">
-                        <input id="lW" type="range"  min="1" max="50">
+                        <input id="lW" type="range"  min="1" max="50" value="5">
                 </div>
             </li>
             <li>
-                <input type="number" placeholder="Font Size" min="10" max="80" id="fS"
-                        pattern="[0-9]{1,2}">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        Font <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="fontSelect" data-font="px Arial">Arial</a></li>
+                        <li><a href="#" class="fontSelect" data-font="px Courier New">Courier New</a></li>
+                        <li><a href="#" class="fontSelect" data-font="px sans-serif">Sans Serif</a></li>
+                        <li><a href="#" class="fontSelect" data-font="px Verdana">Verdana</a></li>
+                    </ul>
+                </div>
             </li>
             <li>
-                <ul>
-                    <li><b>Arial</b><input class="fontSelect" type="radio" name="font" data-font="px Arial"></li>
-                    <li><b>Courier New</b><input class="fontSelect" type="radio" name="font" data-font="px Courier New"></li>
-                    <li><b>Sans Serif</b><input class="fontSelect" type="radio" name="font" data-font="px sans-serif"></li>
-                    <li><b>Verdana</b><input class="fontSelect" type="radio" name="font" data-font="px Verdana"></li>
-                </ul>
+                <input type="number" placeholder="Font Size"  min="10" max="80" id="fS"
+                       pattern="[0-9]{1,2}">
             </li>
             <li>
                 <button type="button" class="btn btn-default btn-lg undo">

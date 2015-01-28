@@ -378,18 +378,16 @@ $(document).ready(function(){
     $(".lineWidth").mouseup(function () {
         //drawing.lineWidth = $(this).value();
         drawing.lineWidth = document.getElementById("lW").value;
+        $(".badge").text(drawing.lineWidth);
     });
     $("#fS").mouseup(function() {
-        //drawing.fontSize = $(this).attr("data-tooltype");
-        //console.log(drawing.fontSize);
-        //console.log($(this).attr("data-tooltype"));
-        console.log(document.getElementById("fS").value);
+        //console.log(document.getElementById("fS").value);
         drawing.fontSize = document.getElementById("fS").value;
     });
     $(".fontSelect").mouseup(function() {
         drawing.nextFont = $(this).attr("data-font");
         //drawing.nextFont = document.getElementsByName("font").value;
-        console.log($(this).attr("data-font"));
+        //console.log($(this).attr("data-font"));
     });
     $(".undo").mousedown(function () {
         var temp = drawing.shapes.pop();
