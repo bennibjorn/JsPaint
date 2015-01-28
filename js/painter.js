@@ -368,19 +368,15 @@ $(document).ready(function(){
         $(".colorButton").removeClass("selected");
         $(this).addClass("selected");
     });
-    $(".lineWidth").mouseup(function () {
-        //drawing.lineWidth = $(this).value();
+    $(".lineWidth").mousemove(function () {
         drawing.lineWidth = document.getElementById("lW").value;
         $(".badge").text(drawing.lineWidth);
     });
     $("#fS").mouseup(function() {
-        //console.log(document.getElementById("fS").value);
         drawing.fontSize = document.getElementById("fS").value;
     });
     $(".fontSelect").mouseup(function() {
         drawing.nextFont = $(this).attr("data-font");
-        //drawing.nextFont = document.getElementsByName("font").value;
-        //console.log($(this).attr("data-font"));
     });
     $(".undo").mousedown(function () {
         var temp = drawing.shapes.pop();
