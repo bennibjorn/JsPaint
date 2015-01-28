@@ -413,7 +413,6 @@ $(document).ready(function(){
                     console.log("err: " + err);
 				}
 			});
-
     });
 
     // Load API
@@ -472,7 +471,8 @@ $(document).ready(function(){
             crossDomain: true,
             success: function (data) {
                 // The save was successful...
-                console.log(data);
+                var arr = JSON.parse(data.WhiteboardContents);
+                console.log(arr);
                 console.log(drawing.shapes);
             },
             error: function (xhr, err) {
