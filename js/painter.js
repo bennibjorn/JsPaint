@@ -297,6 +297,17 @@ $(document).ready(function(){
        }
     });
 
+    function canvasText(left, top, text) {
+        if (text == "3d") { //oooo secret stuff
+            drawing.nextObject = "3dTool";
+            alert("Enjoy your Easter egg");
+            return;
+        } else if (text == "easterFill") { easterFill(); return; }
+        context.font = drawing.fontSize + ' ' + drawing.nextFont;
+        context.fillStyle = drawing.nextColor;
+        context.fillText(text, left, top);
+    }
+
     function easterFill() {
         window.requestAnimFrame = (function() {
             return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -343,6 +354,8 @@ $(document).ready(function(){
     }
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+        tempContext.clearRect(0, 0, canvas.width, canvas.height);
+
     }
     $("#clearBtn").mousedown(function() {
         clear();
@@ -361,16 +374,22 @@ $(document).ready(function(){
         $(".colorButton").removeClass("selected");
         $(this).addClass("selected");
     });
-    $(".fontSize").mousedown(function() {
-        drawing.fontSize = $(this).attr("data-tooltype");
+    $(".lineWidth").click(function () {
+        //drawing.lineWidth = $(this).value();
+        drawing.lineWidth = document.getElementById("lW").value;
     });
-    $(".fontSelect").mousedown(function() {
+    $(".fontSize").mouseup(function() {
+        //drawing.fontSize = $(this).attr("data-tooltype");
+        drawing.fontSize = document.getElementsByClassName(".fontSize");
+    });
+    $(".fontSelect").mouseup(function() {
         drawing.nextFont = $(this).attr("data-tooltype");
     });
     $(".undo").mousedown(function () {
         var temp = drawing.shapes.pop();
         drawing.redo.push(temp);
         clear();
+
         for(var i = 0; i < drawing.shapes.length; i++) {
             drawing.shapes[i].draw();
         }
