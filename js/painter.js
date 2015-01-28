@@ -33,8 +33,6 @@ $(document).ready(function(){
         tool: ""
     });
 
-
-
     var Rect = Shape.extend({
         constructor: function(x, y, h, w, color, lw) {
             this.base(x, y, color, lw, "rect");
@@ -51,10 +49,14 @@ $(document).ready(function(){
         }
     });
 
-    var Circle = Rect.extend({
+    var Circle = Shape.extend({
         constructor: function(x, y, h, w, color, lw) {
-            this.base(x, y, h, w, color, lw, "circle");
+            this.base(x, y, color, lw, "circle");
+            this.height = h;
+            this.width = w;
         },
+        height: 0,
+        width: 0,
 
         draw: function() {
             context.strokeStyle = this.color;
@@ -300,17 +302,6 @@ $(document).ready(function(){
        }
     });
 
-    function canvasText(left, top, text) {
-        if (text == "3d") { //oooo secret stuff
-            drawing.nextObject = "3dTool";
-            alert("Enjoy your Easter egg");
-            return;
-        } else if (text == "easterFill") { easterFill(); return; }
-        context.font = drawing.fontSize + ' ' + drawing.nextFont;
-        context.fillStyle = drawing.nextColor;
-        context.fillText(text, left, top);
-    }
-
     function easterFill() {
         window.requestAnimFrame = (function() {
             return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -463,7 +454,6 @@ $(document).ready(function(){
             crossDomain: true,
             success: function (data) {
                 // The save was successful...
-                console.log(data);
                 printLoadList(data);
             },
             error: function (xhr, err) {
@@ -486,6 +476,8 @@ $(document).ready(function(){
         $(".loadWhiteboardButton").mouseup(function() {
             whiteboardID = $(this).attr("data-whiteboardID");
         });
+
+        console.log(drawing.shapes);
     }
 
     $("#loadSelectedButton").mouseup(function() {
@@ -501,6 +493,8 @@ $(document).ready(function(){
                 var arr = JSON.parse(data.WhiteboardContents);
                 console.log(arr);
                 console.log(drawing.shapes);
+                loadWorker(arr);
+                console.log(drawing.shapes);
             },
             error: function (xhr, err) {
                 // Something went wrong...
@@ -508,4 +502,45 @@ $(document).ready(function(){
             }
         });
     });
+
+    function loadWorker(arr) {
+        for(var i = 0; i < arr.length; i++) {
+            var tooltype = arr[i].tool;
+            var item = arr[i];
+            clear();
+            while (drawing.shapes.length > 0) {
+                drawing.shapes.pop();
+            }
+            console.log("item: ");
+            console.log(item);
+
+            if(tooltype === "rect") {
+                drawing.shapes.push(new Rect(item.x0, item.y0, item.height, item.width, item.color, item.lineWidth));
+                console.log(drawing.shapes);
+            }
+            else if(tooltype === "circle") {
+                var c = new Circle(item.x0, item.y0, item.height, item.width, item.color, item.lineWidth);
+                c.draw();
+                console.log(c);
+                drawing.shapes.push(c);
+            }
+            else if(tooltype === "line") {
+                var l = new Line(item.x0, item.y0, item.x1, item.y1, item.color, item.lineWidth);
+                l.draw();
+                drawing.shapes.push(new Line(item.x0, item.y0, item.x1, item.y1, item.color, item.lineWidth));
+                console.log(drawing.shapes);
+            }
+            else if(tooltype === "pen") {
+                var p = new Pen(item.x0, item.y0, item.color, item.lineWidth);
+                p.arr = item.arr;
+                p.draw();
+                drawing.shapes.push(p);
+            }
+            else if(tooltype === "text") {
+                var t = new Text(item.x0, item.y0, item.font, item.fontSize, item.text, item.color, item.lineWidth);
+                t.draw();
+                drawing.shapes.push(t);
+            }
+        }
+    }
 });
