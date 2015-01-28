@@ -91,8 +91,11 @@ li {
 .modal-footer button {
     margin-right: 10px;
 }
-
 #lW {
-    width: 56%;
-    margin-bottom: 5%;
+    width: 77%;
+    margin-bottom: -7%;
+}
+#fS {
+    width: 14%;
+    margin-bottom: 1%;
 }

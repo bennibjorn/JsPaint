@@ -13,8 +13,8 @@ $(document).ready(function(){
         redo: [],
         nextObject: "pen",
         nextColor: "black",
-        nextFont: "Georgia",
-        fontSize: "20px",
+        nextFont: "px " + "Arial",
+        fontSize: 10,
         lineWidth: 5
     };
 
@@ -113,7 +113,7 @@ $(document).ready(function(){
             this.text = text;
         },
         font: "Arial",
-        fontSize: "14px",
+        fontSize: 14,
         text: "",
 
         draw: function() {
@@ -127,9 +127,10 @@ $(document).ready(function(){
                 return;
             }
 
-            context.font = this.fontSize + ' ' + this.font;
+            context.font = this.fontSize + this.font;
             context.fillStyle = drawing.nextColor;
             context.fillText(this.text, this.x0, this.y0);
+            console.log(context.font);
         }
     });
 
@@ -374,16 +375,21 @@ $(document).ready(function(){
         $(".colorButton").removeClass("selected");
         $(this).addClass("selected");
     });
-    $(".lineWidth").click(function () {
+    $(".lineWidth").mouseup(function () {
         //drawing.lineWidth = $(this).value();
         drawing.lineWidth = document.getElementById("lW").value;
     });
-    $(".fontSize").mouseup(function() {
+    $("#fS").mouseup(function() {
         //drawing.fontSize = $(this).attr("data-tooltype");
-        drawing.fontSize = document.getElementsByClassName(".fontSize");
+        //console.log(drawing.fontSize);
+        //console.log($(this).attr("data-tooltype"));
+        console.log(document.getElementById("fS").value);
+        drawing.fontSize = document.getElementById("fS").value;
     });
     $(".fontSelect").mouseup(function() {
-        drawing.nextFont = $(this).attr("data-tooltype");
+        drawing.nextFont = $(this).attr("data-font");
+        //drawing.nextFont = document.getElementsByName("font").value;
+        console.log($(this).attr("data-font"));
     });
     $(".undo").mousedown(function () {
         var temp = drawing.shapes.pop();

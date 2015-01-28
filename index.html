@@ -84,29 +84,25 @@
                     <span class="glyphicon glyphicon-tint red" aria-hidden="true"></span> Red
                 </button>
             </li>
-            <div class="input-group lineWidth">
-                    <input id="lW" type="number" placeholder="Line Width" min="1"></br>
-            </div>
-            <label>
-                <select class="fontThings"> Font
-                    <option class="fontSelect" data-tooltype="Arial" selected>Arial</option>
-                    <option class="fontSelect" data-tooltype="Georgia">Georgia</option>
-                    <option class="fontSelect" data-tooltype="Tahoma">Tahoma</option>
-                    <option class="fontSelect" data-tooltype="Verdana">Verdana</option>
-
-                </select>
-            </label>
             <li>
-                <label>
-                    <select class="fontThings"> Font Size
-                        <option class="fontSize" data-tooltype="10px">10px</option>
-                        <option class="fontSize" data-tooltype="12px">12px</option>
-                        <option class="fontSize" data-tooltype="14px" selected>14px</option>
-                        <option class="fontSize" data-tooltype="16px">16px</option>
-                        <option class="fontSize" data-tooltype="18px">18px</option>
-                        <option class="fontSize" data-tooltype="20px">20px</option>
-                    </select>
-                </label>
+                <p>Line Width:</p>
+            </li>
+            <li>
+                <div class="input-group lineWidth">
+                        <input id="lW" type="range"  min="1" max="50">
+                </div>
+            </li>
+            <li>
+                <input type="number" placeholder="Font Size" min="10" max="80" id="fS"
+                        pattern="[0-9]{1,2}">
+            </li>
+            <li>
+                <ul>
+                    <li><b>Arial</b><input class="fontSelect" type="radio" name="font" data-font="px Arial"></li>
+                    <li><b>Courier New</b><input class="fontSelect" type="radio" name="font" data-font="px Courier New"></li>
+                    <li><b>Sans Serif</b><input class="fontSelect" type="radio" name="font" data-font="px sans-serif"></li>
+                    <li><b>Verdana</b><input class="fontSelect" type="radio" name="font" data-font="px Verdana"></li>
+                </ul>
             </li>
             <li>
                 <button type="button" class="btn btn-default btn-lg undo">
