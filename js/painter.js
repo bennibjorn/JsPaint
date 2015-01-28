@@ -19,23 +19,25 @@ $(document).ready(function(){
     };
 
     var Shape = Base.extend({
-        constructor: function(x, y, color, lw) {
+        constructor: function(x, y, color, lw, tool) {
             this.x0 = x;
             this.y0 = y;
             this.color = color;
             this.lineWidth = lw;
+            this.tool = tool;
         },
         x0: 0,
         y0: 0,
         color: "black",
-        lineWidth: 1
+        lineWidth: 1,
+        tool: ""
     });
 
 
 
     var Rect = Shape.extend({
         constructor: function(x, y, h, w, color, lw) {
-            this.base(x, y, color, lw);
+            this.base(x, y, color, lw, "rect");
             this.height = h;
             this.width = w;
         },
@@ -51,7 +53,7 @@ $(document).ready(function(){
 
     var Circle = Rect.extend({
         constructor: function(x, y, h, w, color, lw) {
-            this.base(x, y, h, w, color, lw);
+            this.base(x, y, h, w, color, lw, "circle");
         },
 
         draw: function() {
@@ -63,7 +65,7 @@ $(document).ready(function(){
 
     var Line = Shape.extend({
         constructor: function(x, y, x1, y1, color, lw) {
-            this.base(x, y, color, lw);
+            this.base(x, y, color, lw, "line");
             this.x1 = x1;
             this.y1 = y1;
         },
@@ -83,7 +85,7 @@ $(document).ready(function(){
 
     var Pen = Shape.extend({
         constructor: function(x, y, color, lw) {
-            this.base(x, y, color, lw);
+            this.base(x, y, color, lw, "pen");
             this.arr = [];
         },
         arr: [],
@@ -107,7 +109,7 @@ $(document).ready(function(){
 
     var Text = Shape.extend({
         constructor: function(x, y, font, fontSize, text, color, lw) {
-            this.base(x, y, color, lw);
+            this.base(x, y, color, lw, "text");
             this.font = font;
             this.fontSize = fontSize;
             this.text = text;
