@@ -476,8 +476,6 @@ $(document).ready(function(){
         $(".loadWhiteboardButton").mouseup(function() {
             whiteboardID = $(this).attr("data-whiteboardID");
         });
-
-        console.log(drawing.shapes);
     }
 
     $("#loadSelectedButton").mouseup(function() {
@@ -491,10 +489,8 @@ $(document).ready(function(){
             success: function (data) {
                 // The save was successful...
                 var arr = JSON.parse(data.WhiteboardContents);
-                console.log(arr);
-                console.log(drawing.shapes);
+                $('#loadModal').modal('hide');
                 loadWorker(arr);
-                console.log(drawing.shapes);
             },
             error: function (xhr, err) {
                 // Something went wrong...
@@ -504,31 +500,28 @@ $(document).ready(function(){
     });
 
     function loadWorker(arr) {
+        clear();                                // Clear everything that was before on the canvas
+        while (drawing.shapes.length > 0) {
+            drawing.shapes.pop();
+        }
         for(var i = 0; i < arr.length; i++) {
             var tooltype = arr[i].tool;
             var item = arr[i];
-            clear();
-            while (drawing.shapes.length > 0) {
-                drawing.shapes.pop();
-            }
-            console.log("item: ");
-            console.log(item);
 
             if(tooltype === "rect") {
-                drawing.shapes.push(new Rect(item.x0, item.y0, item.height, item.width, item.color, item.lineWidth));
-                console.log(drawing.shapes);
+                var r = new Rect(item.x0, item.y0, item.height, item.width, item.color, item.lineWidth);
+                r.draw();
+                drawing.shapes.push(r);
             }
             else if(tooltype === "circle") {
                 var c = new Circle(item.x0, item.y0, item.height, item.width, item.color, item.lineWidth);
                 c.draw();
-                console.log(c);
                 drawing.shapes.push(c);
             }
             else if(tooltype === "line") {
                 var l = new Line(item.x0, item.y0, item.x1, item.y1, item.color, item.lineWidth);
                 l.draw();
-                drawing.shapes.push(new Line(item.x0, item.y0, item.x1, item.y1, item.color, item.lineWidth));
-                console.log(drawing.shapes);
+                drawing.shapes.push(l);
             }
             else if(tooltype === "pen") {
                 var p = new Pen(item.x0, item.y0, item.color, item.lineWidth);
