@@ -110,11 +110,6 @@ $(document).ready(function(){
                 context.strokeStyle = this.color;
                 drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color, this.filled);
             }
-            }
-            else {
-                context.strokeStyle = this.color;
-                drawEllipse(context, this.x0, this.y0, this.width, this.height, this.lineWidth, this.color, this.filled);
-            }
         }
     });
 
@@ -206,26 +201,6 @@ $(document).ready(function(){
             context.font = this.fontSize + this.font;
             context.fillStyle = drawing.nextColor;
             context.fillText(this.text, this.x0, this.y0);
-        }
-    });
-
-    var Eraser = Shape.extend({
-        constructor: function(x, y, h, w) {
-            this.base(x, y, "#ffffff", 5, "eraser", false);
-            this.height = h;
-            this.width = w;
-        },
-        height: 0,
-        width: 0,
-
-        drawTemp: function(x, y) {
-            tempContext.fillStyle = "#ffffff";
-            tempContext.fillRect(this.x0, this.y0, (x - this.x0), (y - this.y0));
-        },
-
-        draw: function() {
-            context.fillStyle = "#ffffff";
-            context.fillRect(this.x0, this.y0, this.width, this.height);
         }
     });
 
@@ -403,13 +378,6 @@ $(document).ready(function(){
             er.draw();
             drawing.shapes.push(er);
         }
-        else if (drawing.nextObject == "eraser") {
-            var er = drawing.shapes.pop();
-            er.width = (x1 - er.x0);
-            er.height = (y1 - er.y0);
-            er.draw();
-            drawing.shapes.push(er);
-        }
     });
 
     // ENTER function for text-input
@@ -484,6 +452,7 @@ $(document).ready(function(){
         tempContext.clearRect(0, 0, canvas.width, canvas.height);
 
     }
+    <!-- Button events -->
     $("#clearBtn").mousedown(function() { //clears the screen and empties both arrays
         clear();
         while (drawing.shapes.length > 0) {
@@ -625,7 +594,6 @@ $(document).ready(function(){
             "user": username,
             "template": false
         };
-
         $.ajax({
             type: "GET",
             contentType: "application/json; charset=utf-8",
@@ -681,11 +649,14 @@ $(document).ready(function(){
     });
 
     function loadWorker(arr) {
-        clear();                                // Clear everything that was before on the canvas
+        clear(); // Clear everything that was before on the canvas
         while (drawing.shapes.length > 0) {
             drawing.shapes.pop();
         }
-        clear();                                // Clear everything that was before on the canvas
+        for(var i = 0; i < arr.length; i++) {
+            var tooltype = arr[i].tool;
+            var item = arr[i];
+
             if(tooltype === "rect") {
                 var r = new Rect(item.x0, item.y0, item.height, item.width, item.color, item.lineWidth, item.filled);
                 r.draw();

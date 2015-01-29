@@ -40,6 +40,7 @@ canvas {
 
 #tempPainter {
     position: absolute;
+    cursor: crosshair;
 }
 .rightList {
     float: left;
@@ -52,6 +53,7 @@ canvas {
 .paintList li {
     display: inline;
     text-align: center;
+
 }
 #Menu li {
     margin-right: 2%;
