@@ -137,6 +137,26 @@ $(document).ready(function(){
         }
     });
 
+    var Eraser = Shape.extend({
+        constructor: function(x, y, h, w) {
+            this.base(x, y, "#ffffff", 5, "eraser");
+            this.height = h;
+            this.width = w;
+        },
+        height: 0,
+        width: 0,
+
+        drawTemp: function(x, y) {
+            tempContext.fillStyle = "#ffffff";
+            tempContext.fillRect(this.x0, this.y0, (x - this.x0), (y - this.y0));
+        },
+
+        draw: function() {
+            context.fillStyle = "#ffffff";
+            context.fillRect(this.x0, this.y0, this.width, this.height);
+        }
+    });
+
     // DrawEllipse function gotten from http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas/2173084#2173084 through link in slides
     function drawEllipse(ctx, x, y, w, h, lw, c) {
         var kappa = 0.5522848,
@@ -180,8 +200,10 @@ $(document).ready(function(){
             tempContext.moveTo(x0,y0);
         }
         else if (drawing.nextObject == "text") {
-            // x, y, font, fontSize, text, color, lw
             drawing.shapes.push(new Text(x0, y0, drawing.nextFont, drawing.fontSize, "", drawing.nextColor, drawing.lineWidth));
+        }
+        else if (drawing.nextObject == "eraser") {
+            drawing.shapes.push(new Eraser(x0, y0, 0, 0));
         }
     });
 
@@ -226,6 +248,9 @@ $(document).ready(function(){
             context.lineWidth = drawing.lineWidth;
             context.stroke();
         }
+        else if (drawing.nextObject == "eraser" && mousePressed) {
+            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
+        }
     });
 
     $("#tempPainter").mouseup(function(e) {
@@ -237,8 +262,6 @@ $(document).ready(function(){
 
         if (drawing.nextObject == "rect") {
             var r = drawing.shapes.pop();
-            r.x1 = x1;
-            r.y1 = y1;
             r.width = (x1 - r.x0);
             r.height = (y1 - r.y0);
             r.draw();
@@ -277,6 +300,13 @@ $(document).ready(function(){
             $(".canvasContainer").append(currentInputBox);
             currentInputBox.focus();
             // Continues after user presses ENTER
+        }
+        else if (drawing.nextObject == "eraser") {
+            var er = drawing.shapes.pop();
+            er.width = (x1 - er.x0);
+            er.height = (y1 - er.y0);
+            er.draw();
+            drawing.shapes.push(er);
         }
     });
 
@@ -361,7 +391,7 @@ $(document).ready(function(){
             drawing.redo.pop();
         }
     });
-    $(".toolButton").mousedown(function() {
+    $(".toolButton").mousedown(function() {     // Change tools
         drawing.nextObject = $(this).attr("data-tooltype");
         $(".toolButton").removeClass("selected");
         $(this).addClass("selected");
@@ -385,18 +415,22 @@ $(document).ready(function(){
         drawing.nextFont = $(this).attr("data-font");
     });
     $(".undo").mousedown(function () {
-        var temp = drawing.shapes.pop();
-        drawing.redo.push(temp);
-        clear();
+        if(drawing.shapes.length > 0) {
+            var temp = drawing.shapes.pop();
+            drawing.redo.push(temp);
+            clear();
 
-        for(var i = 0; i < drawing.shapes.length; i++) {
-            drawing.shapes[i].draw();
+            for(var i = 0; i < drawing.shapes.length; i++) {
+                drawing.shapes[i].draw();
+            }
         }
     });
     $(".redo").mousedown(function () {
-        var temp = drawing.redo.pop();
-        drawing.shapes.push(temp);
-        temp.draw();
+        if(drawing.redo.length > 0) {
+            var temp = drawing.redo.pop();
+            drawing.shapes.push(temp);
+            temp.draw();
+        }
     });
 
     // Save API
