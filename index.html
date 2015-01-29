@@ -18,7 +18,7 @@
 
 <body>
 
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Painter</a>
@@ -44,7 +44,7 @@
             </li>
             <li id="rect">
                 <button type="button" class="btn btn-default btn-lg toolButton" data-tooltype="rect">
-                    <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
                 </button>
             </li>
             <li id="circle">
@@ -59,42 +59,32 @@
             </li>
             <li id="eraser">
                 <button type="button" class="btn btn-default btn-lg toolButton" data-tooltype="eraser">
-                    <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
             </li>
         </ul>
     </div>
 
     <div class="canvasContainer">
-        <canvas id="painter" width="500" height="500"></canvas>
-        <canvas id="tempPainter" width="500" height="500"></canvas>
+        <div>
+            <canvas id="painter" width="500" height="500"></canvas>
+            <canvas id="tempPainter" width="500" height="500"></canvas>
+        </div>
+        <div>
+            <button type="button" class="btn btn-default btn-lg" id="clearBtn">
+                <span>Clear</span>
+            </button>
+        </div>
     </div>
-    <button type="button" class="btn btn-default btn-lg" id="clearBtn">
-        <span>Clear</span>
-    </button>
     <div class="rightList">
         <ul>
-            <li>
-                <div id="hexColorButton" class="colorButton">
+            <li> <!-- Color button -->
+                <b>Color</b>
+                <div id="hexColorButton">
                     <input id="hexColorInput" type="color" value="#ffffff" />
                 </div>
             </li>
-            <li> <!-- Color button -->
-                <button type="button" class="btn btn-default btn-lg colorButton selected" data-color="black">
-                    <span class="glyphicon glyphicon-tint" aria-hidden="true"></span> Black
-                </button>
-            </li>
-            <li> <!-- Color button -->
-                <button type="button" class="btn btn-default btn-lg colorButton" data-color="blue">
-                    <span class="glyphicon glyphicon-tint blue" aria-hidden="true"></span> Blue
-                </button>
-            </li>
-            <li> <!-- Color button -->
-                <button type="button" class="btn btn-default btn-lg colorButton" data-tooltype="red">
-                    <span class="glyphicon glyphicon-tint red" aria-hidden="true"></span> Red
-                </button>
-            </li>
-            <li role="presentation"><a href="#">Line Width: <span class="badge lineWidthBadge">5</span></a></li>
+            <li role="presentation">Line Width: <span class="badge lineWidthBadge">5</span></li>
             <li> <!-- Line width -->
                 <div class="input-group lineWidth">
                         <input id="lineW" type="range"  min="1" max="50" value="5">
@@ -102,7 +92,7 @@
             </li>
             <li> <!-- Font Select -->
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         Font <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
@@ -113,7 +103,7 @@
                     </ul>
                 </div>
             </li>
-            <li role="presentation"><a href="#">Font Size: <span class="badge fontSizeBadge">20</span></a></li>
+            <li role="presentation">Font Size: <span class="badge fontSizeBadge">20</span></li>
             <li> <!-- Font Size -->
                 <div class="input-group">
                     <input id="fontSize" type="range"  min="1" max="80" value="20">
@@ -185,6 +175,7 @@
         </div>
       </div>
     </div>
+
 </div>
 <!-- /.container -->
 

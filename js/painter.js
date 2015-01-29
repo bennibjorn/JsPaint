@@ -367,14 +367,9 @@ $(document).ready(function(){
         $(".toolButton").removeClass("selected");
         $(this).addClass("selected");
     });
-    $(".colorButton").mousedown(function() {
-        drawing.nextColor = $(this).attr("data-color");
-        $(".colorButton").removeClass("selected");
-        $(this).addClass("selected");
-    });
-    $("#hexColor").change(function() {
-        drawing.nextColor = document.getElementById("hexColor").value;
-        document.getElementById("hexColor").style.backgroundColor = drawing.nextColor;
+    $("#hexColorInput").change(function() {
+        drawing.nextColor = document.getElementById("hexColorInput").value;
+        document.getElementById("hexColorButton").style.backgroundColor = drawing.nextColor;
     });
     $(".lineWidth").mousemove(function () {
         drawing.lineWidth = document.getElementById("lineW").value;

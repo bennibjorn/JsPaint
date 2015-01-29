@@ -27,6 +27,7 @@ canvas {
 
 #Menu {
     padding-top: 5%;
+    padding-left: 2%;
     list-style: none;
     color: white;
 }
@@ -45,36 +46,47 @@ canvas {
 #tempPainter {
     position: absolute;
 }
-
+.rightList {
+    float: left;
+}
 #clearBtn {
     position: relative;
-    clear: both;
-    float: left;
+    margin-top: 97%;
 }
 
 .paintList li {
     display: inline;
     text-align: center;
 }
-
+#Menu li {
+    margin-right: 3%;
+}
 li {
     list-style-type: none;
 }
 .toolButton {
     box-shadow: 6px 6px 13px #888888;
 }
-.colorPicker button {
+.rightList button {
     width: 100px;
     text-align: left;
     margin-bottom: 10px;
     box-shadow: 6px 6px 13px #888888;
 }
-
-.blue {
-    color: blue;
+#hexColorButton {
+    background-color: #f1f1f1;
+    height: 46px;
+    width: 100px;
+    margin-bottom: 2%;
+    border-radius: 10px;
+    box-shadow: 6px 6px 13px #888888;
 }
-.red {
-    color: red;
+#hexColorInput {
+    opacity: 0;
+    display: block;
+    border: none;
+    width: 100px;
+    height: 46px;
 }
 .fontThings {
     margin-bottom: 10px;
@@ -91,13 +103,13 @@ li {
 .modal-footer button {
     margin-right: 10px;
 }
-#lW {
+#lineW {
     width: 77%;
     margin-bottom: 5%;
 }
-#fS {
-    width: 14%;
-    margin-bottom: 1%;
+#fontSize {
+    width: 77%;
+    margin-bottom: 5%;
 }
 .fontSelect {
     margin-left: 1%;
