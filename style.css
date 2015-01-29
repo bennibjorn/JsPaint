@@ -1,5 +1,6 @@
 * {margin: 0; padding: 0;}
 body {
+    background: #ffffff;
     background: rgba(255, 255, 255, 0);
     padding-top: 50px;
 }
@@ -10,10 +11,10 @@ body {
     text-align: center;
 }
 
-#wrapper {width: 645px; height: 500px; margin: 35px auto 0 auto;}
-h1 {
-    color: white; font: 300 40px 'Open Sans';
-    width: 300px; padding: 30px; float: left;
+#wrapper {
+    height: 500px;
+    margin: 35px auto 0 auto;
+    width: 645px;
 }
 
 canvas {
@@ -21,17 +22,17 @@ canvas {
 }
 
 #Menu {
-    padding-top: 5%;
-    padding-left: 2%;
-    list-style: none;
     color: white;
+    list-style: none;
+    padding-left: 2%;
+    padding-top: 5%;
 }
 
 .canvasContainer {
-    position: relative;
-    height: 510px;
-    width: 525px;
     float: left;
+    height: 510px;
+    position: relative;
+    width: 525px;
 }
 
 #painter {
@@ -45,8 +46,8 @@ canvas {
     float: left;
 }
 #clearBtn {
-    position: relative;
     margin-top: 97%;
+    position: relative;
 }
 
 .paintList li {
@@ -92,6 +93,7 @@ li {
     box-shadow: 6px 6px 13px #888888;
 }
 .selected {
+    background: rgb(74, 75, 73);
     background: rgba(74, 75, 73, 0.100);
 }
 

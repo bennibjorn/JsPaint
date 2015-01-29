@@ -367,7 +367,7 @@ $(document).ready(function(){
         $(this).addClass("selected");
     });
     $(function () { //to initialize the tooltips for the toolButtons
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip();
     });
     $("#hexColorInput").change(function() {
         drawing.nextColor = document.getElementById("hexColorInput").value;
