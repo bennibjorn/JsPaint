@@ -21,6 +21,7 @@ $(document).ready(function(){
         filledPen: false
     };
 
+    /* Shapes */
     var Shape = Base.extend({
         constructor: function(x, y, color, lw, tool, filled) {
             this.x0 = x;
@@ -247,19 +248,12 @@ $(document).ready(function(){
         }
         else {
             ctx.strokeStyle = c;
-        if(filled) {
-            ctx.fillStyle = c;
-            ctx.fill();
-        }
-        else {
-            ctx.strokeStyle = c;
             ctx.stroke();
         }
     }
-    }
 
     // Mouse handlers
-    $("#tempPainter").mousedown(function(e) {
+    $("#tempPainter").mousedown(function(e) {       //MouseDown
         x0 = e.pageX - $(this).offset().left;
         y0 = e.pageY - $(this).offset().top;
         mousePressed = true;
@@ -283,12 +277,9 @@ $(document).ready(function(){
         else if (drawing.nextObject == "eraser") {
             drawing.shapes.push(new Eraser(x0, y0, 0, 0));
         }
-        else if (drawing.nextObject == "eraser") {
-            drawing.shapes.push(new Eraser(x0, y0, 0, 0));
-        }
     });
 
-    $("#tempPainter").mousemove(function(e) {
+    $("#tempPainter").mousemove(function(e) {       // MouseMove
         var x = e.pageX - $(this).offset().left;
         var y = e.pageY - $(this).offset().top;
 
@@ -307,23 +298,20 @@ $(document).ready(function(){
             drawing.shapes[drawing.shapes.length - 1].arr.push({x: x, y: y});
             drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
-//        else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
-//            context.beginPath();
-//            context.moveTo(x0,y0);
-//            context.lineTo(x,y);
-//            context.strokeStyle = drawing.nextColor;
-//            context.lineWidth = drawing.lineWidth;
-//            context.stroke();
-//        }
-        else if (drawing.nextObject == "eraser" && mousePressed) {
-            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
+        else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
+            context.beginPath();
+            context.moveTo(x0,y0);
+            context.lineTo(x,y);
+            context.strokeStyle = drawing.nextColor;
+            context.lineWidth = drawing.lineWidth;
+            context.stroke();
         }
         else if (drawing.nextObject == "eraser" && mousePressed) {
             drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
     });
 
-    $("#tempPainter").mouseup(function(e) {
+    $("#tempPainter").mouseup(function(e) {         // MouseUp
         var x1 = e.pageX - $(this).offset().left;
         var y1 = e.pageY - $(this).offset().top;
         mousePressed = false;
@@ -390,6 +378,11 @@ $(document).ready(function(){
                 drawing.shapes.push(t);
 
                 currentInputBox.remove();
+            }
+        }
+        else if(event.which === 13 && drawing.nextObject != "text") {
+            if (currentInputBox) {
+                currentInputBox.remove();   //pressing enter while text is not selected will remove the input box
             }
         }
     });

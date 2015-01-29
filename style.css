@@ -14,25 +14,15 @@ body {
     margin: 35px auto 0 auto;
     width: 645px;
 }
-
 canvas {
     border:2px solid rgb(0, 0, 0);
 }
-
-#Menu {
-    color: white;
-    list-style: none;
-    padding-left: 2%;
-    padding-top: 5%;
-}
-
 .canvasContainer {
     float: left;
     height: 510px;
     position: relative;
     width: 525px;
 }
-
 #painter {
     position: absolute;
     background: white;
@@ -42,24 +32,30 @@ canvas {
     position: absolute;
     cursor: crosshair;
 }
-.rightList {
-    float: left;
-}
+
 #clearBtn {
     margin-top: 97%;
     position: relative;
 }
 
-.paintList li {
-    display: inline;
-    text-align: center;
-
+#Menu {
+    color: white;
+    list-style: none;
+    padding-left: 2%;
+    padding-top: 5%;
 }
 #Menu li {
     margin-right: 2%;
 }
 li {
     list-style-type: none;
+}
+.paintList li {
+    display: inline;
+    text-align: center;
+}
+.rightList {
+    float: left;
 }
 .rightList button {
     width: 100px;
@@ -80,10 +76,6 @@ li {
     width: 100px;
     height: 46px;
 }
-.selected {
-    background: rgb(186, 187, 185);
-}
-
 .modal-footer button {
     margin-right: 10px;
 }
@@ -101,7 +93,9 @@ li {
 .dropShadow {
     box-shadow: 6px 6px 13px #2a2a2a;
 }
+.selected {
+    background: rgb(186, 187, 185);
+}
 .whiteText {
     color: white;
-
 }
