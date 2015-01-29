@@ -185,16 +185,11 @@ $(document).ready(function(){
             this.text = text;
         },
         font: "Arial",
-        fontSize: 14,
+        fontSize: 20,
         text: "",
 
         draw: function() {
-            if (this.text === "3d") { //oooo secret stuff
-                drawing.nextObject = "3dTool";
-                alert("Enjoy your Easter egg");
-                return;
-            }
-            else if (this.text === "easterFill") {
+            if (this.text === "easterFill") {
                 easterFill();
                 return;
             }
@@ -295,6 +290,7 @@ $(document).ready(function(){
             drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
+
             drawing.shapes[drawing.shapes.length - 1].arr.push({x: x, y: y});
             drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
@@ -489,12 +485,12 @@ $(document).ready(function(){
             if(penGlyph.hasClass("fa-paint-brush")) {
                 penGlyph.removeClass("fa-paint-brush");
                 penGlyph.addClass("fa-barcode");
-                drawing.filledPen = true;
+                tooltype = "3dTool";
             }
             else if(penGlyph.hasClass("fa-barcode")) {
                 penGlyph.removeClass("fa-barcode");
                 penGlyph.addClass("fa-paint-brush");
-                drawing.filledPen = false;
+                tooltype = "pen";
             }
         }
         drawing.nextObject = tooltype;
