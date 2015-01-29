@@ -47,6 +47,18 @@ $(document).ready(function(){
         height: 0,
         width: 0,
 
+        drawTemp: function(x, y) {
+            tempContext.lineWidth = this.lineWidth;
+            if(this.filled) {
+                tempContext.fillStyle = this.color;
+                tempContext.fillRect(this.x0, this.y0, (x - this.x0), (y - this.y0));
+            }
+            else {
+                tempContext.strokeStyle = this.color;
+                tempContext.strokeRect(this.x0, this.y0, (x - this.x0), (y - this.y0));
+            }
+        },
+
         draw: function() {
             context.lineWidth = this.lineWidth;
             if(this.filled) {
@@ -76,6 +88,18 @@ $(document).ready(function(){
         height: 0,
         width: 0,
 
+        drawTemp: function(x, y) {
+            tempContext.lineWidth = this.lineWidth;
+            if(this.filled) {
+                tempContext.fillStyle = this.color;
+                drawEllipse(tempContext, this.x0, this.y0, (x - this.x0), (y - this.y0), this.lineWidth, this.color, this.filled);
+            }
+            else {
+                tempContext.strokeStyle = this.color;
+                drawEllipse(tempContext, this.x0, this.y0, (x - this.x0), (y - this.y0), this.lineWidth, this.color, this.filled);
+            }
+        },
+
         draw: function() {
             context.lineWidth = this.lineWidth;
             if(this.filled) {
@@ -103,6 +127,16 @@ $(document).ready(function(){
         x1: 0,
         y1: 0,
 
+        drawTemp: function(x, y) {
+            tempContext.beginPath();
+            tempContext.strokeStyle = this.color;
+            tempContext.lineWidth = this.lineWidth;
+            tempContext.moveTo(this.x0, this.y0);
+            tempContext.lineTo(x, y);
+            tempContext.stroke();
+            tempContext.closePath();
+        },
+
         draw: function() {
             context.beginPath();
             context.strokeStyle = this.color;
@@ -121,20 +155,29 @@ $(document).ready(function(){
         },
         arr: [],
 
+        drawTemp: function() {
+            this.draw();
+        },
+
         draw: function() {
             context.beginPath();
             context.strokeStyle = this.color;
             context.lineWidth = this.lineWidth;
             context.moveTo(this.x0, this.y0);
 
-            for(var i = 0; i < this.arr.length; i++) { // Line to every point the mouse moved to while pressed
-                var x = this.arr[i].x;
-                var y = this.arr[i].y;
-                context.lineTo(x, y);
+            if(this.filled) {
+                context.lineTo(x,y);
+                context.stroke();
             }
-
-            context.stroke();
-            context.closePath();
+            else {
+                for(var i = 0; i < this.arr.length; i++) { // Line to every point the mouse moved to while pressed
+                    var x = this.arr[i].x;
+                    var y = this.arr[i].y;
+                    context.lineTo(x, y);
+                }
+                context.stroke();
+                context.closePath();
+            }
         }
     });
 
@@ -258,8 +301,6 @@ $(document).ready(function(){
         }
         else if (drawing.nextObject == "pen") {
             drawing.shapes.push(new Pen(x0, y0, drawing.nextColor, drawing.lineWidth, drawing.filledPen));
-            tempContext.beginPath();
-            tempContext.moveTo(x0,y0);
         }
         else if (drawing.nextObject == "text") {
             drawing.shapes.push(new Text(x0, y0, drawing.nextFont, drawing.fontSize, "", drawing.nextColor, drawing.lineWidth));
@@ -276,43 +317,29 @@ $(document).ready(function(){
         var x = e.pageX - $(this).offset().left;
         var y = e.pageY - $(this).offset().top;
 
+        tempContext.clearRect(0, 0, canvas.width, canvas.height);       // Refresh tempCanvas
+
         if (drawing.nextObject == "rect" && mousePressed) {
-            tempContext.strokeStyle = drawing.nextColor;
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
-            tempContext.strokeRect(x0, y0, (x - x0), (y - y0));
-            tempContext.lineWidth = drawing.lineWidth;
+            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
         else if (drawing.nextObject == "line" && mousePressed) {
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
-            tempContext.beginPath();
-            tempContext.strokeStyle = drawing.nextColor;
-            tempContext.moveTo(x0, y0);
-            tempContext.lineTo(x, y);
-            tempContext.stroke();
-            tempContext.closePath();
-            tempContext.lineWidth = drawing.lineWidth;
+            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
         else if (drawing.nextObject == "circle" && mousePressed) {
-            tempContext.clearRect(0, 0, canvas.width, canvas.height);
-            drawEllipse(tempContext, x0, y0, (x-x0), (y-y0), drawing.lineWidth, drawing.nextColor);
+            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
         else if (drawing.nextObject == "pen" && mousePressed) {
             drawing.shapes[drawing.shapes.length - 1].arr.push({x: x, y: y});
-
-            tempContext.lineTo(x,y);
-            tempContext.strokeStyle = drawing.nextColor;
-            tempContext.lineWidth = drawing.lineWidth;
-            tempContext.stroke();
-
+            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
-        else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
-            context.beginPath();
-            context.moveTo(x0,y0);
-            context.lineTo(x,y);
-            context.strokeStyle = drawing.nextColor;
-            context.lineWidth = drawing.lineWidth;
-            context.stroke();
-        }
+//        else if (drawing.nextObject == "3dTool" && mousePressed) { //bonus
+//            context.beginPath();
+//            context.moveTo(x0,y0);
+//            context.lineTo(x,y);
+//            context.strokeStyle = drawing.nextColor;
+//            context.lineWidth = drawing.lineWidth;
+//            context.stroke();
+//        }
         else if (drawing.nextObject == "eraser" && mousePressed) {
             drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
@@ -493,6 +520,19 @@ $(document).ready(function(){
                 circleGlyph.removeClass("fa-circle-o");
                 circleGlyph.addClass("fa-circle");
                 drawing.filledCircle = true;
+            }
+        }
+        else if(tooltype === "pen" && ctrl) {
+            var penGlyph = $(this).children();
+            if(penGlyph.hasClass("fa-paint-brush")) {
+                penGlyph.removeClass("fa-paint-brush");
+                penGlyph.addClass("fa-barcode");
+                drawing.filledPen = true;
+            }
+            else if(penGlyph.hasClass("fa-barcode")) {
+                penGlyph.removeClass("fa-barcode");
+                penGlyph.addClass("fa-paint-brush");
+                drawing.filledPen = false;
             }
         }
         drawing.nextObject = tooltype;
