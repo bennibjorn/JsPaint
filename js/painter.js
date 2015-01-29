@@ -134,7 +134,6 @@ $(document).ready(function(){
             context.font = this.fontSize + this.font;
             context.fillStyle = drawing.nextColor;
             context.fillText(this.text, this.x0, this.y0);
-            console.log(context.font);
         }
     });
 
@@ -366,6 +365,9 @@ $(document).ready(function(){
         drawing.nextObject = $(this).attr("data-tooltype");
         $(".toolButton").removeClass("selected");
         $(this).addClass("selected");
+    });
+    $(function () { //to initialize the tooltips for the toolButtons
+        $('[data-toggle="tooltip"]').tooltip()
     });
     $("#hexColorInput").change(function() {
         drawing.nextColor = document.getElementById("hexColorInput").value;
