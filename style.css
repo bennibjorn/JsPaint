@@ -1,10 +1,8 @@
 * {margin: 0; padding: 0;}
 body {
-    background: #ffffff;
-    background: rgba(255, 255, 255, 0);
+    background: url("paintBG.jpg") rgba(255, 255, 255, 0);
     padding-top: 50px;
 }
-
 
 .starter-template {
     padding: 40px 15px;
@@ -37,10 +35,12 @@ canvas {
 
 #painter {
     position: absolute;
+    background: white;
 }
 
 #tempPainter {
     position: absolute;
+    cursor: crosshair;
 }
 .rightList {
     float: left;
@@ -53,6 +53,7 @@ canvas {
 .paintList li {
     display: inline;
     text-align: center;
+
 }
 #Menu li {
     margin-right: 2%;
@@ -60,14 +61,10 @@ canvas {
 li {
     list-style-type: none;
 }
-.toolButton {
-    box-shadow: 6px 6px 13px #888888;
-}
 .rightList button {
     width: 100px;
     text-align: left;
     margin-bottom: 10px;
-    box-shadow: 6px 6px 13px #888888;
 }
 #hexColorButton {
     background-color: #000000;
@@ -75,7 +72,6 @@ li {
     width: 100px;
     margin-bottom: 2%;
     border-radius: 10px;
-    box-shadow: 6px 6px 13px #888888;
 }
 #hexColorInput {
     opacity: 0;
@@ -84,17 +80,8 @@ li {
     width: 100px;
     height: 46px;
 }
-.fontThings {
-    margin-bottom: 10px;
-    width: 100px;
-    height: 35px;
-    background: whitesmoke;
-    border-radius: 10px;
-    box-shadow: 6px 6px 13px #888888;
-}
 .selected {
-    background: rgb(74, 75, 73);
-    background: rgba(74, 75, 73, 0.100);
+    background: rgb(186, 187, 185);
 }
 
 .modal-footer button {
@@ -110,4 +97,11 @@ li {
 }
 .fontSelect {
     margin-left: 1%;
+}
+.dropShadow {
+    box-shadow: 6px 6px 13px #2a2a2a;
+}
+.whiteText {
+    color: white;
+
 }

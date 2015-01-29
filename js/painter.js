@@ -14,7 +14,7 @@ $(document).ready(function(){
         nextObject: "pen",
         nextColor: "black",
         nextFont: "px " + "Arial",
-        fontSize: 10,
+        fontSize: 20,
         lineWidth: 5,
         filledRect: false,
         filledCircle: false,
@@ -67,8 +67,15 @@ $(document).ready(function(){
             }
             else {
                 context.strokeStyle = this.color;
+            if(this.filled) {
+                context.fillStyle = this.color;
+                context.fillRect(this.x0, this.y0, this.width, this.height);
+            }
+            else {
+                context.strokeStyle = this.color;
                 context.strokeRect(this.x0, this.y0, this.width, this.height);
             }
+        }
         }
     });
 
@@ -235,8 +242,15 @@ $(document).ready(function(){
         }
         else {
             ctx.strokeStyle = c;
+        if(filled) {
+            ctx.fillStyle = c;
+            ctx.fill();
+        }
+        else {
+            ctx.strokeStyle = c;
             ctx.stroke();
         }
+    }
     }
 
     // Mouse handlers
@@ -260,6 +274,9 @@ $(document).ready(function(){
         }
         else if (drawing.nextObject == "text") {
             drawing.shapes.push(new Text(x0, y0, drawing.nextFont, drawing.fontSize, "", drawing.nextColor, drawing.lineWidth));
+        }
+        else if (drawing.nextObject == "eraser") {
+            drawing.shapes.push(new Eraser(x0, y0, 0, 0));
         }
         else if (drawing.nextObject == "eraser") {
             drawing.shapes.push(new Eraser(x0, y0, 0, 0));
@@ -293,6 +310,9 @@ $(document).ready(function(){
             context.strokeStyle = drawing.nextColor;
             context.lineWidth = drawing.lineWidth;
             context.stroke();
+        }
+        else if (drawing.nextObject == "eraser" && mousePressed) {
+            drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
         }
         else if (drawing.nextObject == "eraser" && mousePressed) {
             drawing.shapes[drawing.shapes.length - 1].drawTemp(x, y);
@@ -428,6 +448,7 @@ $(document).ready(function(){
         tempContext.clearRect(0, 0, canvas.width, canvas.height);
 
     }
+    <!-- Button events -->
     $("#clearBtn").mousedown(function() { //clears the screen and empties both arrays
         clear();
         while (drawing.shapes.length > 0) {
@@ -503,6 +524,7 @@ $(document).ready(function(){
     });
     $(".undo").mousedown(function () {
         if(drawing.shapes.length > 0) {
+        if(drawing.shapes.length > 0) {
             var temp = drawing.shapes.pop();
             drawing.redo.push(temp);
             clear();
@@ -511,12 +533,15 @@ $(document).ready(function(){
                 drawing.shapes[i].draw();
             }
         }
+        }
     });
     $(".redo").mousedown(function () {
+        if(drawing.redo.length > 0) {
         if(drawing.redo.length > 0) {
             var temp = drawing.redo.pop();
             drawing.shapes.push(temp);
             temp.draw();
+        }
         }
     });
 
@@ -565,7 +590,6 @@ $(document).ready(function(){
             "user": username,
             "template": false
         };
-
         $.ajax({
             type: "GET",
             contentType: "application/json; charset=utf-8",
@@ -621,7 +645,7 @@ $(document).ready(function(){
     });
 
     function loadWorker(arr) {
-        clear();                                // Clear everything that was before on the canvas
+        clear(); // Clear everything that was before on the canvas
         while (drawing.shapes.length > 0) {
             drawing.shapes.pop();
         }
