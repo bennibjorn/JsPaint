@@ -448,7 +448,7 @@ $(document).ready(function(){
         tempContext.clearRect(0, 0, canvas.width, canvas.height);
 
     }
-    <!-- Button events -->
+    // Button events
     $("#clearBtn").mousedown(function() { //clears the screen and empties both arrays
         clear();
         while (drawing.shapes.length > 0) {
