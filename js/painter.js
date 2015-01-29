@@ -14,7 +14,7 @@ $(document).ready(function(){
         nextObject: "pen",
         nextColor: "black",
         nextFont: "px " + "Arial",
-        fontSize: 10,
+        fontSize: 20,
         lineWidth: 5
     };
 
