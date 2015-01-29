@@ -219,6 +219,8 @@ $(document).ready(function(){
             context.beginPath();
             context.moveTo(x0,y0);
             context.lineTo(x,y);
+            context.strokeStyle = drawing.nextColor;
+            context.lineWidth = drawing.lineWidth;
             context.stroke();
         }
     });
@@ -358,36 +360,39 @@ $(document).ready(function(){
         tempContext.clearRect(0, 0, canvas.width, canvas.height);
 
     }
-    $("#clearBtn").mousedown(function() {
+    $("#clearBtn").mousedown(function() { //clears the screen and empties both arrays
         clear();
         while (drawing.shapes.length > 0) {
             drawing.shapes.pop();
         }
+        while (drawing.redo.length > 0) {
+            drawing.redo.pop();
+        }
     });
-
     $(".toolButton").mousedown(function() {
         drawing.nextObject = $(this).attr("data-tooltype");
         $(".toolButton").removeClass("selected");
         $(this).addClass("selected");
     });
     $(".colorButton").mousedown(function() {
-        drawing.nextColor = $(this).attr("data-tooltype");
+        drawing.nextColor = $(this).attr("data-color");
         $(".colorButton").removeClass("selected");
         $(this).addClass("selected");
     });
-    $(".lineWidth").mouseup(function () {
-        //drawing.lineWidth = $(this).value();
-        drawing.lineWidth = document.getElementById("lW").value;
-        $(".badge").text(drawing.lineWidth);
+    $("#hexColor").change(function() {
+        drawing.nextColor = document.getElementById("hexColor").value;
+        document.getElementById("hexColor").style.backgroundColor = drawing.nextColor;
     });
-    $("#fS").mouseup(function() {
-        //console.log(document.getElementById("fS").value);
-        drawing.fontSize = document.getElementById("fS").value;
+    $(".lineWidth").mousemove(function () {
+        drawing.lineWidth = document.getElementById("lineW").value;
+        $(".lineWidthBadge").text(drawing.lineWidth);
+    });
+    $("#fontSize").mousemove(function() {
+        drawing.fontSize = document.getElementById("fontSize").value;
+        $(".fontSizeBadge").text(drawing.fontSize);
     });
     $(".fontSelect").mouseup(function() {
         drawing.nextFont = $(this).attr("data-font");
-        //drawing.nextFont = document.getElementsByName("font").value;
-        //console.log($(this).attr("data-font"));
     });
     $(".undo").mousedown(function () {
         var temp = drawing.shapes.pop();
