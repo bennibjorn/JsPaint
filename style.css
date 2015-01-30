@@ -1,6 +1,6 @@
 * {margin: 0; padding: 0;}
 body {
-    background: url("paintBG.jpg") rgba(255, 255, 255, 0);
+    background: url("http://cdn.elegantthemes.com/blog/wp-content/uploads/2013/09/bg-9-full.jpg") rgba(255, 255, 255, 0);
     padding-top: 50px;
 }
 
@@ -96,6 +96,6 @@ li {
 .selected {
     background: rgb(186, 187, 185);
 }
-.whiteText {
-    color: white;
+.blackText {
+    color: #000000;
 }
